@@ -68,10 +68,13 @@ public record Layout(Direction direction, List<Constraint> constraints, int gap)
 
         // Resolve proportional constraints
         if (proportionalTotal > 0 && remaining > 0) {
+            int propRemaining = remaining;
             for (int i = 0; i < sizes.size(); i++) {
                 if (sizes.get(i) < 0) {
                     int weight = -sizes.get(i);
-                    sizes.set(i, remaining * weight / proportionalTotal);
+                    int size = propRemaining * weight / proportionalTotal;
+                    sizes.set(i, size);
+                    remaining -= size;
                 }
             }
         } else {
@@ -79,6 +82,16 @@ public record Layout(Direction direction, List<Constraint> constraints, int gap)
             for (int i = 0; i < sizes.size(); i++) {
                 if (sizes.get(i) < 0) {
                     sizes.set(i, 0);
+                }
+            }
+        }
+
+        // Distribute any leftover space (from integer division) to last non-zero size
+        if (remaining > 0) {
+            for (int i = sizes.size() - 1; i >= 0; i--) {
+                if (sizes.get(i) > 0) {
+                    sizes.set(i, sizes.get(i) + remaining);
+                    break;
                 }
             }
         }

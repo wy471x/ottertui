@@ -34,6 +34,8 @@ public class DemoApp {
     static class DashboardComponent extends Component {
         private int selectedTab = 0;
         private int selectedItem = 0;
+        private final List<String> tabs = List.of(
+            "Dashboard", "Metrics", "Logs", "Settings", "About");
         private final List<String> menuItems = List.of(
             "Dashboard", "Metrics", "Logs", "Settings", "About");
 
@@ -52,7 +54,20 @@ public class DemoApp {
                 }
             }
 
-            // Layout: tabs at top, then sidebar + main content
+            // Render tabs at top
+            int tabX = area.x() + 2;
+            var tabStyle = new Style(Color.CYAN, Color.RESET, Set.of());
+            var activeTabStyle = new Style(Color.BLACK, Color.CYAN, Set.of());
+            for (int i = 0; i < tabs.size(); i++) {
+                String label = " " + tabs.get(i) + " ";
+                var style = (i == selectedTab) ? activeTabStyle : tabStyle;
+                if (tabX + label.length() <= area.x() + area.width()) {
+                    buffer.setString(tabX, area.y(), label, style);
+                    tabX += label.length() + 1;
+                }
+            }
+
+            // Layout: sidebar + main content
             var mainLayout = Layout.horizontal(List.of(
                 Constraint.percentage(25),
                 Constraint.percentage(75)

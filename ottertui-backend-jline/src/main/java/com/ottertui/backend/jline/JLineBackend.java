@@ -4,16 +4,16 @@ import com.ottertui.core.*;
 
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
+import org.jline.utils.NonBlockingReader;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.Optional;
 
 public class JLineBackend implements TerminalBackend {
 
     private final Terminal terminal;
-    private final InputStream input;
+    private final NonBlockingReader reader;
     private final PrintWriter output;
 
     public JLineBackend() throws IOException {
@@ -23,7 +23,7 @@ public class JLineBackend implements TerminalBackend {
             .system(true)
             .build();
 
-        this.input = terminal.input();
+        this.reader = terminal.reader();
         this.output = terminal.writer();
     }
 
@@ -73,8 +73,8 @@ public class JLineBackend implements TerminalBackend {
     @Override
     public Optional<InputEvent> readInput() {
         try {
-            if (input.available() == 0) return Optional.empty();
-            int ch = input.read();
+            int ch = reader.read(1);
+            if (ch < 0) return Optional.empty();
             if (ch == 0x1B) {
                 return parseEscapeSequence();
             }
@@ -144,10 +144,10 @@ public class JLineBackend implements TerminalBackend {
 
     private Optional<InputEvent> parseEscapeSequence() {
         try {
-            if (input.available() == 0) {
+            int b = reader.read(20);
+            if (b < 0) {
                 return Optional.of(InputEvent.key(KeyCode.ESC));
             }
-            int b = input.read();
 
             if (b == '[') {
                 return parseCsiSequence();
@@ -171,8 +171,8 @@ public class JLineBackend implements TerminalBackend {
             StringBuilder params = new StringBuilder();
             int terminator;
             while (true) {
-                if (input.available() == 0) return Optional.empty();
-                int b = input.read();
+                int b = reader.read(20);
+                if (b < 0) return Optional.empty();
                 if (b >= 0x40 && b <= 0x7E) {
                     terminator = b;
                     break;
@@ -217,8 +217,8 @@ public class JLineBackend implements TerminalBackend {
 
     private Optional<InputEvent> parseSs3Sequence() {
         try {
-            if (input.available() == 0) return Optional.empty();
-            int b = input.read();
+            int b = reader.read(20);
+            if (b < 0) return Optional.empty();
             KeyCode code = switch (b) {
                 case 'P' -> KeyCode.F1;
                 case 'Q' -> KeyCode.F2;
