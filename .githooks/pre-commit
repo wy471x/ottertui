@@ -1,0 +1,93 @@
+#!/bin/bash
+# Pre-commit hook: run Checkstyle on all main source files.
+# This ensures code style consistency before every commit.
+#
+# The hook passes currently (maxWarnings is set to Int.MAX in build.gradle.kts).
+# As violations are fixed, ratchet down maxWarnings toward 0 to make this hook
+# enforce zero-tolerance style checking.
+
+set -e
+
+echo ""
+echo "=============================================="
+echo "  Running Checkstyle (pre-commit hook)"
+echo "=============================================="
+echo ""
+
+# Determine the project root (git rev-parse --show-toplevel)
+PROJECT_ROOT="$(git rev-parse --show-toplevel)"
+
+# Auto-detect JAVA_HOME if not set (cross-platform).
+# Gradle 8.x requires JDK 17–21; JDK 22+ won't work.
+# https://docs.gradle.org/8.10/userguide/compatibility.html
+if [ -z "$JAVA_HOME" ] || [ ! -d "$JAVA_HOME" ]; then
+    _detect_java_home() {
+        local os
+        os="$(uname -s)"
+        case "$os" in
+            Darwin)
+                # macOS: use java_home to find JDK 21 (or fall back to 17)
+                if /usr/libexec/java_home -v 21 &>/dev/null 2>&1; then
+                    /usr/libexec/java_home -v 21
+                elif /usr/libexec/java_home -v 17 &>/dev/null 2>&1; then
+                    /usr/libexec/java_home -v 17
+                fi
+                ;;
+            Linux)
+                # Linux: scan common JDK install paths for 21 or 17
+                local jdk_dirs
+                jdk_dirs=$(ls -d /usr/lib/jvm/java-21-* /usr/lib/jvm/jdk-21* \
+                                /usr/java/jdk-21* /usr/lib/jvm/java-17-* \
+                                /usr/lib/jvm/jdk-17* /usr/java/jdk-17* 2>/dev/null | head -1)
+                if [ -n "$jdk_dirs" ]; then
+                    echo "$jdk_dirs"
+                elif command -v java &>/dev/null; then
+                    # Follow symlinks to find the real JAVA_HOME
+                    local java_bin
+                    java_bin="$(readlink -f "$(command -v java)" 2>/dev/null || command -v java)"
+                    dirname "$(dirname "$java_bin")"
+                fi
+                ;;
+            MINGW*|MSYS*|CYGWIN*)
+                # Windows (Git Bash / MSYS2 / Cygwin):
+                # Prefer user-set env, then check common paths
+                local win_jdk
+                for d in "/c/Program Files/Eclipse Adoptium/jdk-21" \
+                         "/c/Program Files/Java/jdk-21" \
+                         "/c/Program Files/Microsoft/jdk-21"; do
+                    [ -d "$d" ] && { echo "$d"; return 0; }
+                done
+                # Fallback: parse java -version for an existing java on PATH
+                command -v java &>/dev/null && dirname "$(dirname "$(command -v java)")"
+                ;;
+        esac
+    }
+
+    JAVA_HOME="$(_detect_java_home)"
+    unset -f _detect_java_home
+
+    if [ -n "$JAVA_HOME" ] && [ -d "$JAVA_HOME" ]; then
+        export JAVA_HOME
+    fi
+fi
+
+cd "$PROJECT_ROOT"
+
+# Run checkstyle on main sources. Uses --daemon for faster startup.
+# The build passes even with existing warnings because maxWarnings defaults to Int.MAX.
+# Ratchet maxWarnings down toward 0 in build.gradle.kts over time.
+if ./gradlew checkstyleMain --daemon 2>&1; then
+    echo ""
+    echo "Checkstyle: PASSED"
+    echo ""
+    exit 0
+else
+    echo ""
+    echo "=============================================="
+    echo "  Checkstyle: FAILED"
+    echo "  Review violations above before committing."
+    echo "  Target: ratchet maxWarnings down to 0 in build.gradle.kts."
+    echo "=============================================="
+    echo ""
+    exit 1
+fi

@@ -2,6 +2,7 @@ plugins {
     id("java-library")
     id("maven-publish")
     id("jacoco")
+    id("checkstyle")
 }
 
 allprojects {
@@ -18,6 +19,7 @@ subprojects {
     apply(plugin = "java-library")
     apply(plugin = "maven-publish")
     apply(plugin = "jacoco")
+    apply(plugin = "checkstyle")
 
     jacoco {
         toolVersion = "0.8.14"
@@ -25,6 +27,19 @@ subprojects {
 
     java {
         toolchain.languageVersion = JavaLanguageVersion.of(21)
+    }
+
+    checkstyle {
+        toolVersion = "10.21.1"
+        configFile = rootProject.file("config/checkstyle/checkstyle.xml")
+        configDirectory = rootProject.file("config/checkstyle")
+        // maxErrors = 0            (default: never allow errors)
+        // maxWarnings = Int.MAX    (default: unlimited; ratchet down toward 0 over time)
+        // isIgnoreFailures = false (default: report warnings but don't fail build)
+    }
+
+    tasks.named("check") {
+        dependsOn(tasks.named("checkstyleMain"))
     }
 
     tasks.withType<JavaCompile>().configureEach {
@@ -63,5 +78,21 @@ subprojects {
                 }
             }
         }
+    }
+}
+
+/**
+ * Installs the shared pre-commit hook from .githooks/ into the local git config.
+ * Run once per clone: ./gradlew installGitHook
+ */
+tasks.register("installGitHook") {
+    description = "Configures git to use .githooks/ as the hooks directory"
+    group = "setup"
+    doLast {
+        val hooksDir = rootProject.file(".githooks").absolutePath
+        exec {
+            commandLine("git", "config", "core.hooksPath", hooksDir)
+        }
+        println("Git hooks installed from: $hooksDir")
     }
 }

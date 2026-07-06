@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE suppressions PUBLIC
+    "-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
+    "https://checkstyle.org/dtds/suppressions_1_2.dtd">
+
+<suppressions>
+    <!-- Test code: relax Javadoc requirements -->
+    <suppress files="[\\/]src[\\/]test[\\/].*" checks="JavadocMethod"/>
+    <suppress files="[\\/]src[\\/]test[\\/].*" checks="JavadocType"/>
+    <suppress files="[\\/]src[\\/]test[\\/].*" checks="SummaryJavadocCheck"/>
+
+    <!-- Test code: star imports for JUnit assertions are idiomatic -->
+    <suppress files="[\\/]src[\\/]test[\\/].*" checks="AvoidStarImport"/>
+
+    <!-- Test code: suppress complexity and magic number checks -->
+    <suppress files="[\\/]src[\\/]test[\\/].*" checks="CyclomaticComplexity"/>
+    <suppress files="[\\/]src[\\/]test[\\/].*" checks="MagicNumber"/>
+
+    <!-- Allow main() in DemoApp -->
+    <suppress files="DemoApp\.java" checks="UncommentedMain"/>
+
+    <!-- Relax Javadoc on examples module -->
+    <suppress files="[\\/]ottertui-examples[\\/].*" checks="JavadocMethod"/>
+    <suppress files="[\\/]ottertui-examples[\\/].*" checks="JavadocType"/>
+
+    <!-- CharWidth.java is a Unicode lookup table with well-defined constants -->
+    <suppress files="CharWidth\.java" checks="MagicNumber"/>
+    <suppress files="CharWidth\.java" checks="CyclomaticComplexity"/>
+    <suppress files="CharWidth\.java" checks="NeedBraces"/>
+</suppressions>
