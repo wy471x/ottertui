@@ -98,9 +98,10 @@ class StyleSheetTest {
     void ruleToStyle() {
         StyleSheet.Rule rule = new StyleSheet.Rule(
             Selector.universal(),
-            Map.of("color", "cyan", "background", "black")
+            Map.of("color", "cyan", "background", "black"),
+            0
         );
-        Style s = rule.toStyle();
+        Style s = rule.toStyle(Map.of());
         assertEquals(Color.CYAN, s.foreground());
         assertEquals(Color.BLACK, s.background());
     }
@@ -165,7 +166,8 @@ class StyleSheetTest {
         StyleSheet sheet = new StyleSheet();
         sheet.addRule(Selector.universal(), Map.of("color", "#123"));
         Style result = sheet.resolve("x", "y", Set.of());
-        assertEquals(Color.RESET, result.foreground());
+        // #123 → #112233 (each digit doubled)
+        assertEquals(new Color.Rgb(0x11, 0x22, 0x33), result.foreground());
     }
 
     @Test

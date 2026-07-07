@@ -1,0 +1,173 @@
+/* light.tcss — Light theme for OtterTUI */
+
+:root {
+    --primary: #2255cc;
+    --secondary: #5533cc;
+    --danger: #cc2222;
+    --success: #22aa44;
+    --warning: #cc8800;
+    --bg: #f5f5f5;
+    --bg-card: #ffffff;
+    --bg-hover: #e8eef5;
+    --text: #222222;
+    --text-dim: #777788;
+    --border: #ccccdd;
+    --accent: #cc3366;
+}
+
+Screen {
+    background: var(--bg);
+    color: var(--text);
+}
+
+Panel {
+    border-color: var(--border);
+}
+
+Panel.header {
+    border-color: var(--primary);
+    background: var(--bg-card);
+}
+
+Panel.sidebar {
+    border-color: var(--border);
+    background: #eeeef5;
+}
+
+#main-content {
+    color: var(--text);
+    background: var(--bg);
+}
+
+#sidebar {
+    background: #eeeef5;
+    border-color: var(--border);
+}
+
+#status-bar {
+    background: var(--primary);
+    color: white;
+    bold: true;
+}
+
+Button {
+    background: var(--primary);
+    color: white;
+    bold: true;
+}
+
+Button:hover {
+    background: #4477dd;
+}
+
+Button:focus {
+    border-color: #1155cc;
+}
+
+Button.danger {
+    background: var(--danger);
+    color: white;
+}
+
+Button.success {
+    background: var(--success);
+    color: white;
+}
+
+ListItem {
+    color: var(--text-dim);
+}
+
+ListItem:selected {
+    background: var(--primary);
+    color: white;
+    bold: true;
+}
+
+ListItem:hover {
+    background: var(--bg-hover);
+    color: var(--text);
+}
+
+Table {
+    color: var(--text);
+}
+
+Table.header {
+    background: var(--bg-card);
+    color: var(--primary);
+    bold: true;
+}
+
+Table:selected {
+    background: var(--primary);
+    color: white;
+}
+
+Tabs {
+    color: var(--text-dim);
+}
+
+Tabs:selected {
+    background: var(--primary);
+    color: white;
+    bold: true;
+}
+
+Gauge {
+    color: var(--primary);
+}
+
+Gauge.high {
+    color: var(--danger);
+}
+
+Gauge.medium {
+    color: var(--warning);
+}
+
+Gauge.low {
+    color: var(--success);
+}
+
+Sparkline {
+    color: var(--primary);
+}
+
+BarChart {
+    color: var(--secondary);
+}
+
+Label {
+    color: var(--text-dim);
+}
+
+Label.title {
+    color: var(--primary);
+    bold: true;
+}
+
+Label.error {
+    color: var(--danger);
+    bold: true;
+}
+
+Label.success {
+    color: var(--success);
+    bold: true;
+}
+
+Input {
+    background: var(--bg-card);
+    color: var(--text);
+    border-color: var(--border);
+}
+
+Input:focus {
+    border-color: var(--primary);
+}
+
+Scrollbar {
+    background: var(--border);
+    color: var(--primary);
+}

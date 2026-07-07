@@ -3,7 +3,7 @@ plugins {
 }
 
 application {
-    mainClass = "com.ottertui.examples.DemoApp"
+    mainClass = "com.ottertui.examples.AllExamplesApp"
 }
 
 dependencies {

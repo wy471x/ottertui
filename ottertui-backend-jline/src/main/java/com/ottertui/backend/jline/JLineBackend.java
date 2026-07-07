@@ -47,14 +47,15 @@ public class JLineBackend implements TerminalBackend {
     public void flush(Buffer buffer) {
         var sb = new StringBuilder();
 
+        var prevStyle = Style.DEFAULT;
         for (int y = 0; y < buffer.height(); y++) {
             for (int x = 0; x < buffer.width(); x++) {
                 Cell cell = buffer.getCell(x, y);
-                if (cell.ch() == ' ' && cell.style().equals(Style.DEFAULT)) {
-                    continue;
-                }
                 sb.append(cursorTo(y + 1, x + 1));
-                sb.append(styleToSgr(cell.style()));
+                if (!cell.style().equals(prevStyle)) {
+                    sb.append(styleToSgr(cell.style()));
+                    prevStyle = cell.style();
+                }
                 sb.append(cell.ch());
             }
         }
