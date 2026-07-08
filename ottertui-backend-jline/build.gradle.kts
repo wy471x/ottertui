@@ -1,3 +1,7 @@
+tasks.named<JacocoReport>("jacocoTestReport") {
+    classDirectories.setFrom(files())
+}
+
 dependencies {
     api(project(":ottertui-core"))
     implementation(libs.jline.terminal)

@@ -27,6 +27,9 @@ public class StyleSheet {
                 if (vars.containsKey(name)) {
                     return vars.get(name);
                 }
+                if (!name.startsWith("--") && vars.containsKey("--" + name)) {
+                    return vars.get("--" + name);
+                }
             }
             return value;
         }

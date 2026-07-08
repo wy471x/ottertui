@@ -3,12 +3,18 @@ package com.ottertui.toolkit;
 import com.ottertui.core.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.condition.EnabledIf;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ToolkitTest {
 
+    static boolean isTtyAvailable() {
+        return System.console() != null;
+    }
+
     @Test
+    @EnabledIf("isTtyAvailable")
     @DisplayName("build runs config with ElementBuilder")
     void buildRunsConfig() {
         TuiApp app = Toolkit.build(builder -> {
@@ -120,6 +126,7 @@ class ToolkitTest {
     }
 
     @Test
+    @EnabledIf("isTtyAvailable")
     @DisplayName("nesting horizontal inside vertical")
     void nestingHorizontalInVertical() {
         TuiApp app = Toolkit.build(root -> {

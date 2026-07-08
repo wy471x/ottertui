@@ -3,6 +3,7 @@ package com.ottertui.toolkit;
 import com.ottertui.core.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.condition.EnabledIf;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -11,7 +12,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TuiAppTest {
 
+    static boolean isTtyAvailable() {
+        return System.console() != null;
+    }
+
     @Test
+    @EnabledIf("isTtyAvailable")
     @DisplayName("TuiApp constructor does not throw")
     void constructorDoesNotThrow() {
         Element root = new Element.Container(Layout.Direction.VERTICAL,
@@ -21,6 +27,7 @@ class TuiAppTest {
     }
 
     @Test
+    @EnabledIf("isTtyAvailable")
     @DisplayName("TuiApp has runner")
     void hasRunner() {
         Element root = new Element.Container(Layout.Direction.VERTICAL,
@@ -30,6 +37,7 @@ class TuiAppTest {
     }
 
     @Test
+    @EnabledIf("isTtyAvailable")
     @DisplayName("TuiApp with text element compiles to ParagraphWidget")
     void withTextElement() {
         Element.TextElement text = new Element.TextElement("Hello", Style.DEFAULT);
@@ -83,6 +91,7 @@ class TuiAppTest {
     }
 
     @Test
+    @EnabledIf("isTtyAvailable")
     @DisplayName("TuiApp compile handles Container with children")
     void compileContainerWithChildren() {
         Element.TextElement text = new Element.TextElement("A", Style.DEFAULT);
@@ -93,6 +102,7 @@ class TuiAppTest {
     }
 
     @Test
+    @EnabledIf("isTtyAvailable")
     @DisplayName("compile WidgetElement")
     void compileWidgetElement() {
         Element.WidgetElement we = new Element.WidgetElement(

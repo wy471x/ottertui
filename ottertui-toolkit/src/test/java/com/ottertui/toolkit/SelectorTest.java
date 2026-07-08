@@ -62,5 +62,15 @@ class SelectorTest {
         assertInstanceOf(Selector.Type.class, Selector.type("test"));
         assertInstanceOf(Selector.Id.class, Selector.id("test"));
         assertInstanceOf(Selector.ClassSelector.class, Selector.clazz("test"));
+        assertInstanceOf(Selector.PseudoClass.class, Selector.pseudo("hover"));
+    }
+
+    @Test
+    @DisplayName("PseudoClass selector matches pseudo classes")
+    void pseudoClassMatches() {
+        Selector s = Selector.pseudo("hover");
+        assertTrue(s.matches("x", "y", Set.of(), Set.of("hover", "focus")));
+        assertFalse(s.matches("x", "y", Set.of(), Set.of("focus")));
+        assertFalse(s.matches("x", "y", Set.of(), Set.of()));
     }
 }

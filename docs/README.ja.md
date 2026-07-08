@@ -5,7 +5,8 @@
 [![JLine](https://img.shields.io/badge/JLine-3.28-4B8BBE)](https://github.com/jline/jline3)
 [![Lanterna](https://img.shields.io/badge/Lanterna-3.1-555555)](https://github.com/mabe02/lanterna)
 [![JUnit](https://img.shields.io/badge/JUnit-5.11-25A162?logo=junit5&logoColor=white)](https://junit.org/junit5/)
-[![License](https://img.shields.io/badge/License-Apache--2.0-blue)](./LICENSE)
+[![codecov](https://codecov.io/gh/ottertui/ottertui/branch/main/graph/badge.svg)](https://codecov.io/gh/ottertui/ottertui)
+[![License](https://img.shields.io/badge/License-MIT-blue)](./LICENSE)
 
 [ratatui](https://github.com/ratatui/ratatui) にインスパイアされた、Java 向けのモダンなターミナル UI ライブラリです。
 
