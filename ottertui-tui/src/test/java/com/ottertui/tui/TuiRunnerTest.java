@@ -4,7 +4,9 @@ import com.ottertui.core.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 
+import java.util.LinkedList;
 import java.util.Optional;
+import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -18,7 +20,7 @@ class TuiRunnerTest {
         boolean rawMode = false;
         boolean cursorVisible = true;
         AtomicInteger readInputCount = new AtomicInteger(0);
-        InputEvent inputToReturn = null;
+        Queue<InputEvent> inputs = new LinkedList<>();
         AtomicBoolean flushed = new AtomicBoolean(false);
 
         @Override
@@ -35,11 +37,9 @@ class TuiRunnerTest {
 
         @Override
         public Optional<InputEvent> readInput() {
-            int count = readInputCount.incrementAndGet();
-            if (count == 1 && inputToReturn != null) {
-                return Optional.of(inputToReturn);
-            }
-            return Optional.empty();
+            readInputCount.incrementAndGet();
+            InputEvent event = inputs.poll();
+            return Optional.ofNullable(event);
         }
 
         @Override
@@ -68,7 +68,7 @@ class TuiRunnerTest {
     @DisplayName("run enters and exits raw mode")
     void runEntersAndExitsRawMode() {
         StubBackend backend = new StubBackend();
-        backend.inputToReturn = InputEvent.charKey('c', Set.of(Modifier.BOLD));
+        backend.inputs.add(InputEvent.charKey('c', Set.of(Modifier.BOLD)));
 
         Component root = new Component() {
             @Override
@@ -83,7 +83,7 @@ class TuiRunnerTest {
     @DisplayName("run calls render and flush backend")
     void runCallsRender() {
         StubBackend backend = new StubBackend();
-        backend.inputToReturn = InputEvent.charKey('c', Set.of(Modifier.BOLD));
+        backend.inputs.add(InputEvent.charKey('c', Set.of(Modifier.BOLD)));
 
         Component root = new Component() {
             @Override
@@ -98,7 +98,7 @@ class TuiRunnerTest {
     @DisplayName("requestRedraw sets dirty flag for next frame")
     void requestRedraw() {
         StubBackend backend = new StubBackend();
-        backend.inputToReturn = InputEvent.charKey('c', Set.of(Modifier.BOLD));
+        backend.inputs.add(InputEvent.charKey('c', Set.of(Modifier.BOLD)));
 
         Component root = new Component() {
             @Override
@@ -114,7 +114,7 @@ class TuiRunnerTest {
     @DisplayName("key bindings handle Ctrl+C to stop")
     void keyBindingsStop() {
         StubBackend backend = new StubBackend();
-        backend.inputToReturn = InputEvent.charKey('c', Set.of(Modifier.BOLD));
+        backend.inputs.add(InputEvent.charKey('c', Set.of(Modifier.BOLD)));
 
         Component root = new Component() {
             @Override
@@ -129,7 +129,8 @@ class TuiRunnerTest {
     @DisplayName("Ctrl+L triggers redraw")
     void ctrlLTriggersRedraw() {
         StubBackend backend = new StubBackend();
-        backend.inputToReturn = InputEvent.charKey('l', Set.of(Modifier.BOLD));
+        backend.inputs.add(InputEvent.charKey('l', Set.of(Modifier.BOLD)));
+        backend.inputs.add(InputEvent.charKey('c', Set.of(Modifier.BOLD)));
 
         Component root = new Component() {
             @Override
@@ -158,7 +159,7 @@ class TuiRunnerTest {
     @DisplayName("requestRedraw adds dirty flag so render is called")
     void requestRedrawDirtyFlag() {
         StubBackend backend = new StubBackend();
-        backend.inputToReturn = InputEvent.charKey('c', Set.of(Modifier.BOLD));
+        backend.inputs.add(InputEvent.charKey('c', Set.of(Modifier.BOLD)));
 
         Component root = new Component() {
             @Override

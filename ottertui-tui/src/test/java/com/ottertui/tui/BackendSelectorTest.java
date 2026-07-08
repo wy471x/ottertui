@@ -4,10 +4,15 @@ import com.ottertui.core.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.condition.EnabledIf;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class BackendSelectorTest {
+
+    static boolean isTtyAvailable() {
+        return System.console() != null;
+    }
 
     @AfterEach
     void clearProperty() {
@@ -15,6 +20,7 @@ class BackendSelectorTest {
     }
 
     @Test
+    @EnabledIf("isTtyAvailable")
     @DisplayName("create returns a TerminalBackend")
     void createReturnsBackend() {
         try {
@@ -26,6 +32,7 @@ class BackendSelectorTest {
     }
 
     @Test
+    @EnabledIf("isTtyAvailable")
     @DisplayName("create with jline property set")
     void createWithJline() {
         System.setProperty("ottertui.backend", "jline");
@@ -39,6 +46,7 @@ class BackendSelectorTest {
     }
 
     @Test
+    @EnabledIf("isTtyAvailable")
     @DisplayName("create with lanterna property set")
     void createWithLanterna() {
         System.setProperty("ottertui.backend", "lanterna");
@@ -52,6 +60,7 @@ class BackendSelectorTest {
     }
 
     @Test
+    @EnabledIf("isTtyAvailable")
     @DisplayName("create with unknown backend falls through to lanterna")
     void createWithUnknownBackend() {
         System.setProperty("ottertui.backend", "unknown");
