@@ -1,5 +1,9 @@
 # OtterTUI
 
+<p align="center">
+  <img src="assets/logo.png" alt="OtterTUI logo" width="320">
+</p>
+
 [![Java](https://img.shields.io/badge/Java-21+-ED8B00?logo=openjdk&logoColor=white)](https://openjdk.org/)
 [![Gradle](https://img.shields.io/badge/Gradle-8.10-02303A?logo=gradle&logoColor=white)](https://gradle.org/)
 [![JLine](https://img.shields.io/badge/JLine-3.28-4B8BBE)](https://github.com/jline/jline3)
