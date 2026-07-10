@@ -10,8 +10,8 @@ allprojects {
     version = "0.1.0"
 
     repositories {
-        maven { url = uri("https://maven.aliyun.com/repository/central") }
         mavenCentral()
+        maven { url = uri("https://maven.aliyun.com/repository/central") }
     }
 }
 

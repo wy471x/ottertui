@@ -1,7 +1,7 @@
 package com.ottertui.backend.aesh;
 
 import com.ottertui.core.*;
-import org.aesh.readline.terminal.TerminalBuilder;
+import org.aesh.terminal.tty.TerminalBuilder;
 import org.aesh.terminal.Attributes;
 import org.aesh.terminal.Terminal;
 import org.aesh.terminal.tty.Size;
