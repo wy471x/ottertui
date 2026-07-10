@@ -94,9 +94,9 @@ tasks.register("installGitHook") {
     group = "setup"
     doLast {
         val hooksDir = rootProject.file(".githooks").absolutePath
-        exec {
-            commandLine("git", "config", "core.hooksPath", hooksDir)
-        }
+        val pb = ProcessBuilder("git", "config", "core.hooksPath", hooksDir)
+            .inheritIO()
+        pb.start().waitFor()
         println("Git hooks installed from: $hooksDir")
     }
 }
