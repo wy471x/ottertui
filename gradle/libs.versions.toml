@@ -15,3 +15,4 @@ jansi = { module = "org.fusesource.jansi:jansi", version.ref = "jansi" }
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
+junit-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit" }

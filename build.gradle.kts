@@ -53,6 +53,10 @@ subprojects {
         finalizedBy(tasks.named("jacocoTestReport"))
     }
 
+    dependencies {
+        "testRuntimeOnly"("org.junit.platform:junit-platform-launcher:6.1.1")
+    }
+
     tasks.named<JacocoReport>("jacocoTestReport") {
         dependsOn(tasks.named("test"))
         reports {
