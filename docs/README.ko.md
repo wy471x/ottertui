@@ -5,11 +5,11 @@
 </p>
 
 [![Java](https://img.shields.io/badge/Java-21+-ED8B00?logo=openjdk&logoColor=white)](https://openjdk.org/)
-[![Gradle](https://img.shields.io/badge/Gradle-8.10-02303A?logo=gradle&logoColor=white)](https://gradle.org/)
-[![JLine](https://img.shields.io/badge/JLine-3.28-4B8BBE)](https://github.com/jline/jline3)
-[![Aesh](https://img.shields.io/badge/Aesh-2.6-8A2BE2)](https://github.com/aeshell/aesh)
-[![Lanterna](https://img.shields.io/badge/Lanterna-3.1-555555)](https://github.com/mabe02/lanterna)
-[![JUnit](https://img.shields.io/badge/JUnit-5.11-25A162?logo=junit5&logoColor=white)](https://junit.org/junit5/)
+[![Gradle](https://img.shields.io/badge/Gradle-9.6.1-02303A?logo=gradle&logoColor=white)](https://gradle.org/)
+[![JLine](https://img.shields.io/badge/JLine-4.3.1-4B8BBE)](https://github.com/jline/jline3)
+[![Aesh](https://img.shields.io/badge/Aesh-3.16.2-8A2BE2)](https://github.com/aeshell/aesh)
+[![Lanterna](https://img.shields.io/badge/Lanterna-3.1.5-555555)](https://github.com/mabe02/lanterna)
+[![JUnit](https://img.shields.io/badge/JUnit-6.1.1-25A162?logo=junit5&logoColor=white)](https://junit.org/junit5/)
 [![codecov](https://codecov.io/gh/ottertui/ottertui/branch/main/graph/badge.svg)](https://codecov.io/gh/ottertui/ottertui)
 [![License](https://img.shields.io/badge/License-MIT-blue)](./LICENSE)
 
