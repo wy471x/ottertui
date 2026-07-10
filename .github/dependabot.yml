@@ -20,6 +20,9 @@ updates:
       # Gradle major version bumps are manual
       - dependency-name: "gradle"
         update-types: ["version-update:semver-major"]
+      # JUnit major upgrades can break Gradle integration (launcher/engine mismatch)
+      - dependency-name: "org.junit*"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: "github-actions"
     directory: "/"
