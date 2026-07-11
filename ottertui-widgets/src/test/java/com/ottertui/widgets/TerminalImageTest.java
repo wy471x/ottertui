@@ -5,6 +5,8 @@ import org.junit.jupiter.api.DisplayName;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 
@@ -22,6 +24,8 @@ class TerminalImageTest {
         return img;
     }
 
+    // ── Protocol detection ──
+
     @Test
     @DisplayName("detect returns a valid protocol")
     void detectReturnsProtocol() {
@@ -34,84 +38,66 @@ class TerminalImageTest {
 
     @Test
     @DisplayName("detect with KITTY_WINDOW_ID env var")
-    void detectKittyWindowId() throws Exception {
-        setEnv("KITTY_WINDOW_ID", "test123");
-        try {
-            assertEquals(TerminalImage.Protocol.KITTY, TerminalImage.detect());
-        } finally {
-            clearEnv("KITTY_WINDOW_ID");
-        }
+    void detectKittyWindowId() {
+        Map<String, String> env = new HashMap<>();
+        env.put("KITTY_WINDOW_ID", "test123");
+        assertEquals(TerminalImage.Protocol.KITTY, TerminalImage.detect(env));
     }
 
     @Test
     @DisplayName("detect with ITERM_SESSION_ID env var")
-    void detectItermSessionId() throws Exception {
-        setEnv("ITERM_SESSION_ID", "session123");
-        try {
-            assertEquals(TerminalImage.Protocol.ITERM2, TerminalImage.detect());
-        } finally {
-            clearEnv("ITERM_SESSION_ID");
-        }
+    void detectItermSessionId() {
+        Map<String, String> env = new HashMap<>();
+        env.put("ITERM_SESSION_ID", "session123");
+        assertEquals(TerminalImage.Protocol.ITERM2, TerminalImage.detect(env));
     }
 
     @Test
     @DisplayName("detect with TERM_PROGRAM=iterm2")
-    void detectTermProgramIterm() throws Exception {
-        setEnv("TERM_PROGRAM", "iTerm.app");
-        try {
-            assertEquals(TerminalImage.Protocol.ITERM2, TerminalImage.detect());
-        } finally {
-            clearEnv("TERM_PROGRAM");
-        }
+    void detectTermProgramIterm() {
+        Map<String, String> env = new HashMap<>();
+        env.put("TERM_PROGRAM", "iTerm.app");
+        assertEquals(TerminalImage.Protocol.ITERM2, TerminalImage.detect(env));
     }
 
     @Test
     @DisplayName("detect with TERM containing kitty")
-    void detectTermKitty() throws Exception {
-        setEnv("TERM", "xterm-kitty");
-        try {
-            assertEquals(TerminalImage.Protocol.KITTY, TerminalImage.detect());
-        } finally {
-            clearEnv("TERM");
-        }
+    void detectTermKitty() {
+        Map<String, String> env = new HashMap<>();
+        env.put("TERM", "xterm-kitty");
+        assertEquals(TerminalImage.Protocol.KITTY, TerminalImage.detect(env));
     }
 
     @Test
     @DisplayName("detect with TERM_PROGRAM=Apple_Terminal")
-    void detectTermProgramApple() throws Exception {
-        setEnv("TERM_PROGRAM", "Apple_Terminal");
-        try {
-            assertEquals(TerminalImage.Protocol.ITERM2, TerminalImage.detect());
-        } finally {
-            clearEnv("TERM_PROGRAM");
-        }
+    void detectTermProgramApple() {
+        Map<String, String> env = new HashMap<>();
+        env.put("TERM_PROGRAM", "Apple_Terminal");
+        assertEquals(TerminalImage.Protocol.ITERM2, TerminalImage.detect(env));
     }
 
     @Test
     @DisplayName("detect with TERM containing ghostty")
-    void detectTermGhostty() throws Exception {
-        setEnv("TERM", "xterm-ghostty");
-        try {
-            assertEquals(TerminalImage.Protocol.KITTY, TerminalImage.detect());
-        } finally {
-            clearEnv("TERM");
-        }
+    void detectTermGhostty() {
+        Map<String, String> env = new HashMap<>();
+        env.put("TERM", "xterm-ghostty");
+        assertEquals(TerminalImage.Protocol.KITTY, TerminalImage.detect(env));
     }
 
-    @SuppressWarnings("unchecked")
-    private static void setEnv(String key, String value) throws Exception {
-        var envField = System.getenv().getClass().getDeclaredField("m");
-        envField.setAccessible(true);
-        var env = (java.util.Map<String, String>) envField.get(System.getenv());
-        env.put(key, value);
+    @Test
+    @DisplayName("detect returns SIXEL when no known env vars set")
+    void detectReturnsSixelForUnknownEnv() {
+        Map<String, String> env = new HashMap<>();
+        assertEquals(TerminalImage.Protocol.SIXEL, TerminalImage.detect(env));
     }
 
-    @SuppressWarnings("unchecked")
-    private static void clearEnv(String key) throws Exception {
-        var envField = System.getenv().getClass().getDeclaredField("m");
-        envField.setAccessible(true);
-        var env = (java.util.Map<String, String>) envField.get(System.getenv());
-        env.remove(key);
+    @Test
+    @DisplayName("detect prioritizes TERM_PROGRAM over TERM")
+    void detectPrioritizesTermProgram() {
+        Map<String, String> env = new HashMap<>();
+        env.put("TERM_PROGRAM", "iTerm.app");
+        env.put("TERM", "xterm-kitty");
+        assertEquals(TerminalImage.Protocol.ITERM2, TerminalImage.detect(env));
     }
 
     // ── Kitty ──

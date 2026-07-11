@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Base64;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 
@@ -31,7 +32,12 @@ public final class TerminalImage {
 
     /** Auto-detect best protocol from environment. */
     public static Protocol detect() {
-        String termProgram = System.getenv("TERM_PROGRAM");
+        return detect(System.getenv());
+    }
+
+    /** Package-private for testing — detect from a controlled env map. */
+    static Protocol detect(Map<String, String> env) {
+        String termProgram = env.get("TERM_PROGRAM");
         if (termProgram != null) {
             String lower = termProgram.toLowerCase(Locale.ROOT);
             if (lower.contains("iterm") || lower.contains("apple_terminal")) {
@@ -39,10 +45,10 @@ public final class TerminalImage {
             }
         }
 
-        if (System.getenv("KITTY_WINDOW_ID") != null) return Protocol.KITTY;
-        if (System.getenv("ITERM_SESSION_ID") != null) return Protocol.ITERM2;
+        if (env.get("KITTY_WINDOW_ID") != null) return Protocol.KITTY;
+        if (env.get("ITERM_SESSION_ID") != null) return Protocol.ITERM2;
 
-        String term = System.getenv("TERM");
+        String term = env.get("TERM");
         if (term != null) {
             if (term.contains("kitty") || term.contains("ghostty")) return Protocol.KITTY;
         }
