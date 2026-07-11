@@ -37,7 +37,7 @@ public class FfmBackend implements TerminalBackend {
     private static final long TIOCGWINSZ = 0x40087468L;
 
     private static final Linker LINKER = Linker.nativeLinker();
-    private static final SymbolLookup LIBC = SymbolLookup.libraryLookup("c", Arena.global());
+    private static final SymbolLookup LIBC = LibC.LOOKUP;
 
     private static final MethodHandle ioctl;
     private static final MethodHandle readHandle;

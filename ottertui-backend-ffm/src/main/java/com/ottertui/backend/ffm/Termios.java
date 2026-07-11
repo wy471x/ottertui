@@ -19,7 +19,7 @@ import static java.lang.foreign.ValueLayout.*;
 public final class Termios implements AutoCloseable {
 
     private static final Linker LINKER = Linker.nativeLinker();
-    private static final SymbolLookup LIBC = SymbolLookup.libraryLookup("c", Arena.global());
+    private static final SymbolLookup LIBC = LibC.LOOKUP;
 
     // --- macOS termios layout ---
     // struct termios {

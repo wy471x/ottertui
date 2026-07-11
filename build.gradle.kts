@@ -28,7 +28,8 @@ subprojects {
     }
 
     java {
-        toolchain.languageVersion = JavaLanguageVersion.of(21)
+        // toolchain/version intentionally unspecified — uses the current JVM.
+        // The settings.gradle.kts conditional excludes FFM on JDK <22.
     }
 
     checkstyle {
