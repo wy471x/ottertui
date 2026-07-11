@@ -8,28 +8,28 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class BarChartWidgetTest {
+class BarChartTest {
 
     @Test
     @DisplayName("default constructor with bars")
     void defaultConstructor() {
-        var bars = List.of(new BarChartWidget.Bar("A", 10, Style.DEFAULT));
-        BarChartWidget w = new BarChartWidget(bars);
+        var bars = List.of(new BarChart.Bar("A", 10, Style.DEFAULT));
+        BarChart w = new BarChart(bars);
         assertNotNull(w);
     }
 
     @Test
     @DisplayName("constructor with custom bar width and gap")
     void customConstructor() {
-        var bars = List.of(new BarChartWidget.Bar("A", 10, Style.DEFAULT));
-        BarChartWidget w = new BarChartWidget(bars, 5, 2);
+        var bars = List.of(new BarChart.Bar("A", 10, Style.DEFAULT));
+        BarChart w = new BarChart(bars, 5, 2);
         assertNotNull(w);
     }
 
     @Test
     @DisplayName("render with empty bars does nothing")
     void renderEmptyBars() {
-        BarChartWidget w = new BarChartWidget(List.of());
+        BarChart w = new BarChart(List.of());
         Buffer b = new Buffer(10, 5);
         w.render(new Rect(0, 0, 10, 5), b);
         assertEquals(Cell.EMPTY, b.getCell(0, 0));
@@ -39,10 +39,10 @@ class BarChartWidgetTest {
     @DisplayName("render draws bars and labels")
     void renderDrawsBars() {
         var bars = List.of(
-            new BarChartWidget.Bar("A", 50, new Style(Color.RED, Color.RESET, java.util.Set.of())),
-            new BarChartWidget.Bar("B", 100, new Style(Color.BLUE, Color.RESET, java.util.Set.of()))
+            new BarChart.Bar("A", 50, new Style(Color.RED, Color.RESET, java.util.Set.of())),
+            new BarChart.Bar("B", 100, new Style(Color.BLUE, Color.RESET, java.util.Set.of()))
         );
-        BarChartWidget w = new BarChartWidget(bars, 2, 1);
+        BarChart w = new BarChart(bars, 2, 1);
         Buffer b = new Buffer(20, 8);
         w.render(new Rect(0, 0, 20, 8), b);
 
@@ -54,10 +54,10 @@ class BarChartWidgetTest {
     @DisplayName("render bar heights proportional to values")
     void renderProportionalBars() {
         var bars = List.of(
-            new BarChartWidget.Bar("A", 50, Style.DEFAULT),
-            new BarChartWidget.Bar("B", 100, Style.DEFAULT)
+            new BarChart.Bar("A", 50, Style.DEFAULT),
+            new BarChart.Bar("B", 100, Style.DEFAULT)
         );
-        BarChartWidget w = new BarChartWidget(bars, 1, 1);
+        BarChart w = new BarChart(bars, 1, 1);
         Buffer b = new Buffer(20, 10);
         w.render(new Rect(0, 0, 20, 10), b);
         assertNotEquals(' ', b.getCell(0, 8).ch());
@@ -68,9 +68,9 @@ class BarChartWidgetTest {
     @DisplayName("render label truncated to bar width")
     void renderLabelTruncated() {
         var bars = List.of(
-            new BarChartWidget.Bar("LongLabel", 50, Style.DEFAULT)
+            new BarChart.Bar("LongLabel", 50, Style.DEFAULT)
         );
-        BarChartWidget w = new BarChartWidget(bars, 3, 1);
+        BarChart w = new BarChart(bars, 3, 1);
         Buffer b = new Buffer(10, 5);
         w.render(new Rect(0, 0, 10, 5), b);
         assertEquals('L', b.getCell(0, 4).ch());
@@ -80,11 +80,11 @@ class BarChartWidgetTest {
     @DisplayName("render clips at area width")
     void renderClipsAtWidth() {
         var bars = List.of(
-            new BarChartWidget.Bar("A", 10, Style.DEFAULT),
-            new BarChartWidget.Bar("B", 10, Style.DEFAULT),
-            new BarChartWidget.Bar("C", 10, Style.DEFAULT)
+            new BarChart.Bar("A", 10, Style.DEFAULT),
+            new BarChart.Bar("B", 10, Style.DEFAULT),
+            new BarChart.Bar("C", 10, Style.DEFAULT)
         );
-        BarChartWidget w = new BarChartWidget(bars, 5, 1);
+        BarChart w = new BarChart(bars, 5, 1);
         Buffer b = new Buffer(8, 8);
         w.render(new Rect(0, 0, 8, 8), b);
         assertEquals('A', b.getCell(0, 7).ch());

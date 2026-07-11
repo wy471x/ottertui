@@ -15,6 +15,7 @@ public class JLineBackend implements TerminalBackend {
     private final Terminal terminal;
     private final NonBlockingReader reader;
     private final PrintWriter output;
+    private Buffer prevBuffer;
 
     public JLineBackend() throws IOException {
         this.terminal = TerminalBuilder.builder()
@@ -46,18 +47,43 @@ public class JLineBackend implements TerminalBackend {
     @Override
     public void flush(Buffer buffer) {
         var sb = new StringBuilder();
+        boolean isFirst = prevBuffer == null
+            || prevBuffer.width() != buffer.width()
+            || prevBuffer.height() != buffer.height();
 
-        var prevStyle = Style.DEFAULT;
+        // Row-level diffing: only emit rows that changed
         for (int y = 0; y < buffer.height(); y++) {
+            boolean rowChanged = isFirst;
+            if (!rowChanged) {
+                for (int x = 0; x < buffer.width(); x++) {
+                    if (!buffer.getCell(x, y).equals(prevBuffer.getCell(x, y))) {
+                        rowChanged = true;
+                        break;
+                    }
+                }
+            }
+            if (!rowChanged) continue;
+
+            // Write the entire row from column 1
+            sb.append(cursorTo(y + 1, 1));
+            var prevStyle = Style.DEFAULT;
+
             for (int x = 0; x < buffer.width(); x++) {
                 Cell cell = buffer.getCell(x, y);
-                sb.append(cursorTo(y + 1, x + 1));
                 if (!cell.style().equals(prevStyle)) {
                     sb.append(styleToSgr(cell.style()));
                     prevStyle = cell.style();
                 }
                 sb.append(cell.ch());
             }
+        }
+
+        prevBuffer = buffer;
+
+        // Write raw content (escape sequences) directly
+        for (var raw : buffer.rawContent()) {
+            sb.append(cursorTo(raw.y() + 1, raw.x() + 1));
+            sb.append(raw.text());
         }
 
         sb.append(Reset);

@@ -4,18 +4,18 @@ import com.ottertui.core.*;
 
 import java.util.List;
 
-public class BarChartWidget implements Widget {
+public class BarChart implements Widget {
     private final List<Bar> bars;
     private final int barWidth;
     private final int barGap;
 
     public record Bar(String label, double value, Style style) {}
 
-    public BarChartWidget(List<Bar> bars) {
+    public BarChart(List<Bar> bars) {
         this(bars, 3, 1);
     }
 
-    public BarChartWidget(List<Bar> bars, int barWidth, int barGap) {
+    public BarChart(List<Bar> bars, int barWidth, int barGap) {
         this.bars = bars;
         this.barWidth = barWidth;
         this.barGap = barGap;

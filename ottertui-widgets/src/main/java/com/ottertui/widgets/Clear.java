@@ -2,7 +2,7 @@ package com.ottertui.widgets;
 
 import com.ottertui.core.*;
 
-public class ClearWidget implements Widget {
+public class Clear implements Widget {
     @Override
     public void render(Rect area, Buffer buffer) {
         for (int y = area.y(); y < area.y() + area.height(); y++) {

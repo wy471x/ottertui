@@ -6,26 +6,26 @@ import org.junit.jupiter.api.DisplayName;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ParagraphWidgetTest {
+class ParagraphTest {
 
     @Test
     @DisplayName("default constructor with text")
     void defaultConstructor() {
-        ParagraphWidget w = new ParagraphWidget("Hello");
+        Paragraph w = new Paragraph("Hello");
         assertNotNull(w);
     }
 
     @Test
     @DisplayName("full constructor with style, alignment, wrap")
     void fullConstructor() {
-        ParagraphWidget w = new ParagraphWidget("Hello", Style.DEFAULT, Alignment.CENTER, false);
+        Paragraph w = new Paragraph("Hello", Style.DEFAULT, Alignment.CENTER, false);
         assertNotNull(w);
     }
 
     @Test
     @DisplayName("render left aligned with wrap")
     void renderLeftAligned() {
-        ParagraphWidget w = new ParagraphWidget("Hello World");
+        Paragraph w = new Paragraph("Hello World");
         Buffer b = new Buffer(20, 3);
         w.render(new Rect(0, 0, 20, 3), b);
         assertEquals('H', b.getCell(0, 0).ch());
@@ -35,7 +35,7 @@ class ParagraphWidgetTest {
     @Test
     @DisplayName("render center aligned")
     void renderCenterAligned() {
-        ParagraphWidget w = new ParagraphWidget("Hi", Style.DEFAULT, Alignment.CENTER, false);
+        Paragraph w = new Paragraph("Hi", Style.DEFAULT, Alignment.CENTER, false);
         Buffer b = new Buffer(20, 3);
         w.render(new Rect(0, 0, 20, 3), b);
         assertEquals('H', b.getCell(9, 0).ch());
@@ -44,7 +44,7 @@ class ParagraphWidgetTest {
     @Test
     @DisplayName("render right aligned")
     void renderRightAligned() {
-        ParagraphWidget w = new ParagraphWidget("Hi", Style.DEFAULT, Alignment.RIGHT, false);
+        Paragraph w = new Paragraph("Hi", Style.DEFAULT, Alignment.RIGHT, false);
         Buffer b = new Buffer(20, 3);
         w.render(new Rect(0, 0, 20, 3), b);
         assertEquals('H', b.getCell(18, 0).ch());
@@ -53,7 +53,7 @@ class ParagraphWidgetTest {
     @Test
     @DisplayName("render no-wrap truncates text")
     void renderNoWrapTruncates() {
-        ParagraphWidget w = new ParagraphWidget("HelloWorld", Style.DEFAULT, Alignment.LEFT, false);
+        Paragraph w = new Paragraph("HelloWorld", Style.DEFAULT, Alignment.LEFT, false);
         Buffer b = new Buffer(5, 3);
         w.render(new Rect(0, 0, 5, 3), b);
         assertEquals('H', b.getCell(0, 0).ch());
@@ -63,7 +63,7 @@ class ParagraphWidgetTest {
     @Test
     @DisplayName("render wraps long text to multiple lines")
     void renderWrapsText() {
-        ParagraphWidget w = new ParagraphWidget("Hello World Test");
+        Paragraph w = new Paragraph("Hello World Test");
         Buffer b = new Buffer(6, 5);
         w.render(new Rect(0, 0, 6, 5), b);
         assertEquals('H', b.getCell(0, 0).ch());
@@ -73,7 +73,7 @@ class ParagraphWidgetTest {
     @Test
     @DisplayName("render wraps on word boundaries")
     void renderWrapsOnWordBoundaries() {
-        ParagraphWidget w = new ParagraphWidget("Hello World");
+        Paragraph w = new Paragraph("Hello World");
         Buffer b = new Buffer(6, 5);
         w.render(new Rect(0, 0, 6, 5), b);
         assertEquals('H', b.getCell(0, 0).ch());
@@ -83,7 +83,7 @@ class ParagraphWidgetTest {
     @Test
     @DisplayName("render clips at area height with wrap")
     void renderClipsAtHeight() {
-        ParagraphWidget w = new ParagraphWidget("A\nB\nC\nD\nE");
+        Paragraph w = new Paragraph("A\nB\nC\nD\nE");
         Buffer b = new Buffer(10, 2);
         w.render(new Rect(0, 0, 10, 2), b);
         assertEquals('A', b.getCell(0, 0).ch());
@@ -94,7 +94,7 @@ class ParagraphWidgetTest {
     @Test
     @DisplayName("render with empty paragraph lines")
     void renderEmptyLines() {
-        ParagraphWidget w = new ParagraphWidget("\n\n");
+        Paragraph w = new Paragraph("\n\n");
         Buffer b = new Buffer(10, 5);
         w.render(new Rect(0, 0, 10, 5), b);
         assertEquals(Cell.EMPTY.ch(), b.getCell(0, 0).ch());
@@ -103,7 +103,7 @@ class ParagraphWidgetTest {
     @Test
     @DisplayName("render wrap with zero width does nothing")
     void renderZeroWidth() {
-        ParagraphWidget w = new ParagraphWidget("Hello");
+        Paragraph w = new Paragraph("Hello");
         Buffer b = new Buffer(10, 5);
         w.render(new Rect(0, 0, 0, 5), b);
         assertEquals(Cell.EMPTY, b.getCell(0, 0));
@@ -112,7 +112,7 @@ class ParagraphWidgetTest {
     @Test
     @DisplayName("render wraps at exact space boundary")
     void renderWrapsAtSpaceBoundary() {
-        ParagraphWidget w = new ParagraphWidget("Hello World");
+        Paragraph w = new Paragraph("Hello World");
         Buffer b = new Buffer(6, 5);
         w.render(new Rect(0, 0, 6, 5), b);
         assertEquals('H', b.getCell(0, 0).ch());
@@ -122,7 +122,7 @@ class ParagraphWidgetTest {
     @Test
     @DisplayName("render trims leading spaces after wrap")
     void renderTrimsLeadingSpaces() {
-        ParagraphWidget w = new ParagraphWidget("Hello   World");
+        Paragraph w = new Paragraph("Hello   World");
         Buffer b = new Buffer(6, 5);
         w.render(new Rect(0, 0, 6, 5), b);
         assertEquals('H', b.getCell(0, 0).ch());
@@ -132,7 +132,7 @@ class ParagraphWidgetTest {
     @Test
     @DisplayName("render with CENTER alignment")
     void renderCenterAlignment() {
-        ParagraphWidget w = new ParagraphWidget("Hi", Style.DEFAULT, Alignment.CENTER, false);
+        Paragraph w = new Paragraph("Hi", Style.DEFAULT, Alignment.CENTER, false);
         Buffer b = new Buffer(10, 5);
         w.render(new Rect(0, 0, 10, 5), b);
         assertEquals('H', b.getCell(4, 0).ch());
@@ -142,7 +142,7 @@ class ParagraphWidgetTest {
     @Test
     @DisplayName("render with RIGHT alignment")
     void renderRightAlignment() {
-        ParagraphWidget w = new ParagraphWidget("Hi", Style.DEFAULT, Alignment.RIGHT, false);
+        Paragraph w = new Paragraph("Hi", Style.DEFAULT, Alignment.RIGHT, false);
         Buffer b = new Buffer(10, 5);
         w.render(new Rect(0, 0, 10, 5), b);
         assertEquals('H', b.getCell(8, 0).ch());
@@ -152,7 +152,7 @@ class ParagraphWidgetTest {
     @Test
     @DisplayName("render CENTER alignment with wrap")
     void renderCenterAlignmentWithWrap() {
-        ParagraphWidget w = new ParagraphWidget("Hi", Style.DEFAULT, Alignment.CENTER, true);
+        Paragraph w = new Paragraph("Hi", Style.DEFAULT, Alignment.CENTER, true);
         Buffer b = new Buffer(10, 5);
         w.render(new Rect(0, 0, 10, 5), b);
         assertEquals('H', b.getCell(4, 0).ch());
@@ -162,7 +162,7 @@ class ParagraphWidgetTest {
     @Test
     @DisplayName("render RIGHT alignment with wrap")
     void renderRightAlignmentWithWrap() {
-        ParagraphWidget w = new ParagraphWidget("Hi", Style.DEFAULT, Alignment.RIGHT, true);
+        Paragraph w = new Paragraph("Hi", Style.DEFAULT, Alignment.RIGHT, true);
         Buffer b = new Buffer(10, 5);
         w.render(new Rect(0, 0, 10, 5), b);
         assertEquals('H', b.getCell(8, 0).ch());
@@ -172,7 +172,7 @@ class ParagraphWidgetTest {
     @Test
     @DisplayName("render unwrapped text truncation")
     void renderUnwrappedTruncation() {
-        ParagraphWidget w = new ParagraphWidget("Hello World", Style.DEFAULT, Alignment.LEFT, false);
+        Paragraph w = new Paragraph("Hello World", Style.DEFAULT, Alignment.LEFT, false);
         Buffer b = new Buffer(5, 5);
         w.render(new Rect(0, 0, 5, 5), b);
         assertEquals('H', b.getCell(0, 0).ch());

@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class WidgetRenderingTest {
 
     @Nested
-    @DisplayName("ParagraphWidget → buffer → flush")
+    @DisplayName("Paragraph → buffer → flush")
     class Paragraph {
 
         @Test
@@ -30,7 +30,7 @@ class WidgetRenderingTest {
         void leftAlignedWrapped() {
             var backend = new StubBackend().withSize(40, 6);
             var buf = new Buffer(40, 6);
-            var widget = new ParagraphWidget("Hello world this is a test",
+            var widget = new com.ottertui.widgets.Paragraph("Hello world this is a test",
                 Style.DEFAULT, Alignment.LEFT, true);
             widget.render(new Rect(2, 1, 36, 4), buf);
             backend.flush(buf);
@@ -45,7 +45,7 @@ class WidgetRenderingTest {
         void rightAligned() {
             var backend = new StubBackend().withSize(40, 5);
             var buf = new Buffer(40, 5);
-            var widget = new ParagraphWidget("Right",
+            var widget = new com.ottertui.widgets.Paragraph("Right",
                 Style.DEFAULT, Alignment.RIGHT, false);
             widget.render(new Rect(2, 2, 30, 1), buf);
             backend.flush(buf);
@@ -60,7 +60,7 @@ class WidgetRenderingTest {
         void centered() {
             var backend = new StubBackend().withSize(40, 5);
             var buf = new Buffer(40, 5);
-            var widget = new ParagraphWidget("Center",
+            var widget = new com.ottertui.widgets.Paragraph("Center",
                 Style.DEFAULT, Alignment.CENTER, false);
             widget.render(new Rect(2, 2, 30, 1), buf);
             backend.flush(buf);
@@ -137,7 +137,7 @@ class WidgetRenderingTest {
         void halfGauge() {
             var backend = new StubBackend().withSize(40, 4);
             var buf = new Buffer(40, 4);
-            var gauge = new GaugeWidget(0.5,
+            var gauge = new com.ottertui.widgets.Gauge(0.5,
                 new Style(Color.CYAN, Color.RESET, Set.of()),
                 new Style(Color.DARK_GRAY, Color.RESET, Set.of()));
             gauge.render(new Rect(2, 1, 20, 1), buf);
@@ -154,7 +154,7 @@ class WidgetRenderingTest {
     }
 
     @Nested
-    @DisplayName("ListWidget → buffer → flush")
+    @DisplayName("List → buffer → flush")
     class List_ {
 
         @Test
@@ -162,7 +162,7 @@ class WidgetRenderingTest {
         void listSelectionRenders() {
             var backend = new StubBackend().withSize(40, 10);
             var buf = new Buffer(40, 10);
-            var list = new ListWidget(List.of("Alpha", "Beta", "Gamma"));
+            var list = new com.ottertui.widgets.List(java.util.List.of("Alpha", "Beta", "Gamma"));
             list.select(1);
             list.render(new Rect(2, 2, 20, 5), buf);
             backend.flush(buf);
@@ -187,7 +187,7 @@ class WidgetRenderingTest {
             var block = Block.bordered().title("Panel");
             block.render(area, buf);
             var inner = block.innerRect(area);
-            new ParagraphWidget("Content inside block",
+            new com.ottertui.widgets.Paragraph("Content inside block",
                 new Style(Color.GREEN, Color.RESET, Set.of()),
                 Alignment.LEFT, true)
                 .render(inner, buf);

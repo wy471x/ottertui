@@ -12,7 +12,7 @@ import com.ottertui.tui.Component;
 import com.ottertui.tui.TuiRunner;
 import com.ottertui.widgets.Block;
 import com.ottertui.widgets.BorderStyle;
-import com.ottertui.widgets.ClearWidget;
+import com.ottertui.widgets.Clear;
 
 import java.io.IOException;
 import java.util.Set;
@@ -34,7 +34,7 @@ public class BlockExample {
 
         @Override
         public void render(Rect area, Buffer buffer) {
-            new ClearWidget().render(area, buffer);
+            new Clear().render(area, buffer);
 
             var outer = Block.bordered(BorderStyle.ROUNDED)
                 .title(" Block Widget — Border Styles ")

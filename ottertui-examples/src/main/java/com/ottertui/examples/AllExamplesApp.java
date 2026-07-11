@@ -13,11 +13,17 @@ import com.ottertui.examples.apps.TetrisGame;
 import com.ottertui.examples.apps.ThemeExample;
 import com.ottertui.examples.widgets.BarChartExample;
 import com.ottertui.examples.widgets.BlockExample;
+import com.ottertui.examples.widgets.CalendarWidgetExample;
+import com.ottertui.examples.widgets.CanvasExample;
+import com.ottertui.examples.widgets.ChartExample;
 import com.ottertui.examples.widgets.ClearWidgetExample;
+import com.ottertui.examples.widgets.FillExample;
 import com.ottertui.examples.widgets.GaugeExample;
 import com.ottertui.examples.widgets.LayoutExample;
+import com.ottertui.examples.widgets.LineGaugeExample;
 import com.ottertui.examples.widgets.ListExample;
 import com.ottertui.examples.widgets.ParagraphExample;
+import com.ottertui.examples.widgets.ScrollbarExample;
 import com.ottertui.examples.widgets.SparklineExample;
 import com.ottertui.examples.widgets.TableExample;
 import com.ottertui.examples.widgets.TabsExample;
@@ -60,8 +66,10 @@ public class AllExamplesApp {
 
         private final List<String> examples = List.of(
             "Paragraph", "Block", "List", "Tabs", "Table",
-            "Gauge", "Sparkline", "BarChart", "Layout", "ClearWidget",
-            "Calendar", "Theme Demo", "Tetris"
+            "Gauge", "Sparkline", "BarChart", "Layout", "Clear",
+            "Calendar", "Theme Demo", "Tetris",
+            "Fill", "LineGauge", "Scrollbar", "CalendarWidget",
+            "Chart", "Canvas"
         );
 
         private final String[] descs = {
@@ -77,7 +85,13 @@ public class AllExamplesApp {
             "Clears a region to blank cells",
             "Monthly calendar with navigation and mini calendars",
             "CSS theme engine demo with dark/light switching",
-            "Classic Tetris game with scoring and levels"
+            "Classic Tetris game with scoring and levels",
+            "Fill regions with custom characters and styles",
+            "Line-style horizontal progress indicator",
+            "Interactive vertical/horizontal scrollbar",
+            "Calendar widget with month navigation",
+            "Braille-dot line chart with datasets",
+            "Braille-dot drawing canvas with shapes"
         };
 
         void handleKey(String key) {
@@ -112,6 +126,12 @@ public class AllExamplesApp {
                 case 10 -> CalendarExample.createComponent();
                 case 11 -> ThemeExample.createComponent();
                 case 12 -> TetrisGame.createComponent();
+                case 13 -> FillExample.createComponent();
+                case 14 -> LineGaugeExample.createComponent();
+                case 15 -> ScrollbarExample.createComponent();
+                case 16 -> CalendarWidgetExample.createComponent();
+                case 17 -> ChartExample.createComponent();
+                case 18 -> CanvasExample.createComponent();
                 default -> null;
             };
         }

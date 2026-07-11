@@ -15,7 +15,7 @@ import javax.imageio.ImageIO;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ImageWidgetTest {
+class ImageTest {
 
     private BufferedImage testImage() {
         BufferedImage img = new BufferedImage(16, 12, BufferedImage.TYPE_INT_RGB);
@@ -30,7 +30,7 @@ class ImageWidgetTest {
     @Test
     @DisplayName("fromImage creates widget with default protocol")
     void fromImageDefault() {
-        ImageWidget w = ImageWidget.fromImage(testImage(), 10, 8);
+        Image w = Image.fromImage(testImage(), 10, 8);
         assertNotNull(w);
         assertEquals(10, w.cellWidth());
         assertEquals(8, w.cellHeight());
@@ -39,7 +39,7 @@ class ImageWidgetTest {
     @Test
     @DisplayName("fromImage with explicit protocol")
     void fromImageExplicitProtocol() {
-        ImageWidget w = ImageWidget.fromImage(testImage(), 20, 15,
+        Image w = Image.fromImage(testImage(), 20, 15,
             TerminalImage.Protocol.KITTY);
         assertEquals(TerminalImage.Protocol.KITTY, w.protocol());
     }
@@ -51,7 +51,7 @@ class ImageWidgetTest {
         ImageIO.write(testImage(), "PNG", baos);
         byte[] data = baos.toByteArray();
 
-        ImageWidget w = ImageWidget.fromBytes(data, 15, 10,
+        Image w = Image.fromBytes(data, 15, 10,
             TerminalImage.Protocol.ITERM2);
         assertNotNull(w);
         assertEquals(TerminalImage.Protocol.ITERM2, w.protocol());
@@ -64,7 +64,7 @@ class ImageWidgetTest {
         ImageIO.write(testImage(), "PNG", baos);
         byte[] data = baos.toByteArray();
 
-        ImageWidget w = ImageWidget.fromBytes(data, 10, 10);
+        Image w = Image.fromBytes(data, 10, 10);
         assertNotNull(w);
         assertNotNull(w.protocol());
     }
@@ -75,7 +75,7 @@ class ImageWidgetTest {
         Path file = tempDir.resolve("test.png");
         ImageIO.write(testImage(), "PNG", file.toFile());
 
-        ImageWidget w = ImageWidget.fromFile(file.toString(), 10, 10);
+        Image w = Image.fromFile(file.toString(), 10, 10);
         assertNotNull(w);
         assertEquals(10, w.cellWidth());
     }
@@ -86,7 +86,7 @@ class ImageWidgetTest {
         Path file = tempDir.resolve("test.png");
         ImageIO.write(testImage(), "PNG", file.toFile());
 
-        ImageWidget w = ImageWidget.fromFile(file.toString(), 8, 6,
+        Image w = Image.fromFile(file.toString(), 8, 6,
             TerminalImage.Protocol.SIXEL);
         assertEquals(TerminalImage.Protocol.SIXEL, w.protocol());
     }
@@ -94,7 +94,7 @@ class ImageWidgetTest {
     @Test
     @DisplayName("fromResource loads from classpath")
     void fromResource() throws Exception {
-        ImageWidget w = ImageWidget.fromResource("/test-image.png", 1, 1,
+        Image w = Image.fromResource("/test-image.png", 1, 1,
             TerminalImage.Protocol.KITTY);
         assertNotNull(w);
         assertEquals(1, w.cellWidth());
@@ -104,7 +104,7 @@ class ImageWidgetTest {
     @Test
     @DisplayName("fromResource without protocol auto-detects")
     void fromResourceAutoDetect() throws Exception {
-        ImageWidget w = ImageWidget.fromResource("/test-image.png", 1, 1);
+        Image w = Image.fromResource("/test-image.png", 1, 1);
         assertNotNull(w);
         assertNotNull(w.protocol());
     }
@@ -113,62 +113,76 @@ class ImageWidgetTest {
     @DisplayName("fromResource throws on non-existent resource")
     void fromResourceThrows() {
         assertThrows(IOException.class, () ->
-            ImageWidget.fromResource("/nonexistent.png", 10, 10));
+            Image.fromResource("/nonexistent.png", 10, 10));
     }
 
     @Test
     @DisplayName("fromFile throws on non-existent file")
     void fromFileThrows() {
         assertThrows(Exception.class, () ->
-            ImageWidget.fromFile("/nonexistent/path.png", 10, 10));
+            Image.fromFile("/nonexistent/path.png", 10, 10));
+    }
+
+    @Test
+    @DisplayName("fromFile with non-image file throws")
+    void fromFileNonImage(@TempDir Path tempDir) throws Exception {
+        Path file = tempDir.resolve("not-image.txt");
+        Files.writeString(file, "hello world");
+        assertThrows(IOException.class, () ->
+            Image.fromFile(file.toString(), 10, 10));
     }
 
     // ── Render ──
 
     @Test
-    @DisplayName("render with Kitty protocol does not throw")
+    @DisplayName("render with Kitty protocol produces raw write")
     void renderKitty() {
-        ImageWidget w = ImageWidget.fromImage(testImage(), 10, 8,
+        Image w = Image.fromImage(testImage(), 10, 8,
             TerminalImage.Protocol.KITTY);
         Buffer b = new Buffer(80, 24);
         w.render(new Rect(0, 0, 80, 24), b);
-        assertEquals('\033', b.getCell(0, 0).ch());
+        assertFalse(b.rawContent().isEmpty());
+        assertTrue(b.rawContent().get(0).text().startsWith("\033_"));
     }
 
     @Test
-    @DisplayName("render with iTerm2 protocol does not throw")
+    @DisplayName("render with iTerm2 protocol produces raw write")
     void renderITerm2() {
-        ImageWidget w = ImageWidget.fromImage(testImage(), 10, 8,
+        Image w = Image.fromImage(testImage(), 10, 8,
             TerminalImage.Protocol.ITERM2);
         Buffer b = new Buffer(80, 24);
         w.render(new Rect(0, 0, 80, 24), b);
-        assertEquals('\033', b.getCell(0, 0).ch());
+        assertFalse(b.rawContent().isEmpty());
+        assertTrue(b.rawContent().get(0).text().startsWith("\033]"));
     }
 
     @Test
-    @DisplayName("render with Sixel protocol does not throw")
+    @DisplayName("render with Sixel protocol produces raw write")
     void renderSixel() {
-        ImageWidget w = ImageWidget.fromImage(testImage(), 10, 8,
+        Image w = Image.fromImage(testImage(), 10, 8,
             TerminalImage.Protocol.SIXEL);
         Buffer b = new Buffer(80, 24);
         w.render(new Rect(0, 0, 80, 24), b);
-        assertEquals('\033', b.getCell(0, 0).ch());
+        assertFalse(b.rawContent().isEmpty());
+        assertTrue(b.rawContent().get(0).text().startsWith("\033P"));
     }
 
     @Test
     @DisplayName("render at offset position")
     void renderAtOffset() {
-        ImageWidget w = ImageWidget.fromImage(testImage(), 5, 4,
+        Image w = Image.fromImage(testImage(), 5, 4,
             TerminalImage.Protocol.KITTY);
         Buffer b = new Buffer(80, 24);
         w.render(new Rect(10, 5, 20, 10), b);
-        assertEquals('\033', b.getCell(10, 5).ch());
+        assertFalse(b.rawContent().isEmpty());
+        assertEquals(10, b.rawContent().get(0).x());
+        assertEquals(5, b.rawContent().get(0).y());
     }
 
     @Test
     @DisplayName("render with auto-detected protocol")
     void renderAutoDetect() {
-        ImageWidget w = ImageWidget.fromImage(testImage(), 6, 4);
+        Image w = Image.fromImage(testImage(), 6, 4);
         Buffer b = new Buffer(80, 24);
         assertDoesNotThrow(() -> w.render(new Rect(0, 0, 80, 24), b));
     }
@@ -178,11 +192,12 @@ class ImageWidgetTest {
     void renderITerm2FromBytes() throws Exception {
         var baos = new ByteArrayOutputStream();
         ImageIO.write(testImage(), "PNG", baos);
-        ImageWidget w = ImageWidget.fromBytes(baos.toByteArray(), 10, 8,
+        Image w = Image.fromBytes(baos.toByteArray(), 10, 8,
             TerminalImage.Protocol.ITERM2);
         Buffer b = new Buffer(80, 24);
         w.render(new Rect(0, 0, 80, 24), b);
-        assertEquals('\033', b.getCell(0, 0).ch());
+        assertFalse(b.rawContent().isEmpty());
+        assertTrue(b.rawContent().get(0).text().startsWith("\033]"));
     }
 
     @Test
@@ -190,7 +205,7 @@ class ImageWidgetTest {
     void renderCorruptSixelData() {
         // Sixel needs valid image bytes; corrupt bytes cause render to return early
         byte[] corrupt = new byte[]{0x00, 0x01, 0x02};
-        ImageWidget w = ImageWidget.fromBytes(corrupt, 10, 8,
+        Image w = Image.fromBytes(corrupt, 10, 8,
             TerminalImage.Protocol.SIXEL);
         Buffer b = new Buffer(80, 24);
         // Should not throw — render returns early when ImageIO.read fails
@@ -200,7 +215,7 @@ class ImageWidgetTest {
     @Test
     @DisplayName("cellWidth and cellHeight reflect display size")
     void displayDimensions() {
-        ImageWidget w = ImageWidget.fromImage(testImage(), 30, 20,
+        Image w = Image.fromImage(testImage(), 30, 20,
             TerminalImage.Protocol.KITTY);
         assertEquals(30, w.cellWidth());
         assertEquals(20, w.cellHeight());

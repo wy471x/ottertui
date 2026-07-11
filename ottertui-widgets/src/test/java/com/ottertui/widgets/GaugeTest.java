@@ -6,12 +6,12 @@ import org.junit.jupiter.api.DisplayName;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class GaugeWidgetTest {
+class GaugeTest {
 
     @Test
     @DisplayName("constructor clamps ratio to 0.0-1.0")
     void constructorClampsRatio() {
-        GaugeWidget g = new GaugeWidget(-0.5);
+        Gauge g = new Gauge(-0.5);
         Buffer b = new Buffer(10, 1);
         g.render(new Rect(0, 0, 10, 1), b);
         assertEquals('░', b.getCell(0, 0).ch());
@@ -20,7 +20,7 @@ class GaugeWidgetTest {
     @Test
     @DisplayName("ratio above 1.0 clamped to 1.0")
     void ratioAboveOne() {
-        GaugeWidget g = new GaugeWidget(2.0);
+        Gauge g = new Gauge(2.0);
         Buffer b = new Buffer(10, 1);
         g.render(new Rect(0, 0, 10, 1), b);
         assertNotEquals('░', b.getCell(0, 0).ch());
@@ -29,7 +29,7 @@ class GaugeWidgetTest {
     @Test
     @DisplayName("zero ratio draws all background")
     void zeroRatio() {
-        GaugeWidget g = new GaugeWidget(0.0);
+        Gauge g = new Gauge(0.0);
         Buffer b = new Buffer(10, 1);
         g.render(new Rect(0, 0, 10, 1), b);
         for (int x = 0; x < 10; x++) {
@@ -40,7 +40,7 @@ class GaugeWidgetTest {
     @Test
     @DisplayName("full ratio draws all filled")
     void fullRatio() {
-        GaugeWidget g = new GaugeWidget(1.0);
+        Gauge g = new Gauge(1.0);
         Buffer b = new Buffer(10, 1);
         g.render(new Rect(0, 0, 10, 1), b);
         for (int x = 0; x < 10; x++) {
@@ -51,7 +51,7 @@ class GaugeWidgetTest {
     @Test
     @DisplayName("50 percent ratio")
     void halfRatio() {
-        GaugeWidget g = new GaugeWidget(0.5);
+        Gauge g = new Gauge(0.5);
         Buffer b = new Buffer(10, 1);
         g.render(new Rect(0, 0, 10, 1), b);
         assertEquals('█', b.getCell(0, 0).ch());
@@ -61,7 +61,7 @@ class GaugeWidgetTest {
     @Test
     @DisplayName("custom style constructor")
     void customStyle() {
-        GaugeWidget g = new GaugeWidget(0.5,
+        Gauge g = new Gauge(0.5,
             new Style(Color.RED, Color.RESET, java.util.Set.of()),
             new Style(Color.BLUE, Color.RESET, java.util.Set.of()));
         Buffer b = new Buffer(10, 1);
@@ -73,7 +73,7 @@ class GaugeWidgetTest {
     @Test
     @DisplayName("render at non-zero position")
     void renderAtOffset() {
-        GaugeWidget g = new GaugeWidget(1.0);
+        Gauge g = new Gauge(1.0);
         Buffer b = new Buffer(20, 5);
         g.render(new Rect(5, 2, 10, 1), b);
         assertEquals('█', b.getCell(5, 2).ch());
@@ -85,7 +85,7 @@ class GaugeWidgetTest {
     @Test
     @DisplayName("empty area width renders nothing")
     void emptyArea() {
-        GaugeWidget g = new GaugeWidget(0.5);
+        Gauge g = new Gauge(0.5);
         Buffer b = new Buffer(10, 1);
         g.render(new Rect(0, 0, 0, 1), b);
         assertEquals(Cell.EMPTY, b.getCell(0, 0));

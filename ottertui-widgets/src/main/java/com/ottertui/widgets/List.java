@@ -2,21 +2,20 @@ package com.ottertui.widgets;
 
 import com.ottertui.core.*;
 
-import java.util.List;
 import java.util.Set;
 
-public class ListWidget implements Widget {
-    private final List<String> items;
+public class List implements Widget {
+    private final java.util.List<String> items;
     private int selectedIndex = 0;
     private final Style selectedStyle;
     private final Style normalStyle;
 
-    public ListWidget(List<String> items) {
+    public List(java.util.List<String> items) {
         this(items, new Style(Color.BLACK, Color.WHITE, Set.of()),
             Style.DEFAULT);
     }
 
-    public ListWidget(List<String> items, Style selectedStyle, Style normalStyle) {
+    public List(java.util.List<String> items, Style selectedStyle, Style normalStyle) {
         this.items = items;
         this.selectedStyle = selectedStyle;
         this.normalStyle = normalStyle;

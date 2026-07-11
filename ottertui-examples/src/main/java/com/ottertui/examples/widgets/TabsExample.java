@@ -13,8 +13,8 @@ import com.ottertui.tui.Component;
 import com.ottertui.tui.TuiRunner;
 import com.ottertui.widgets.Block;
 import com.ottertui.widgets.BorderStyle;
-import com.ottertui.widgets.ClearWidget;
-import com.ottertui.widgets.TabsWidget;
+import com.ottertui.widgets.Clear;
+import com.ottertui.widgets.Tabs;
 
 import java.io.IOException;
 import java.util.List;
@@ -34,7 +34,7 @@ public class TabsExample {
     public static TComponent createComponent() { return new TComponent(); }
 
     static class TComponent extends Component implements InteractiveExample {
-        private final TabsWidget tabs = new TabsWidget(List.of(
+        private final Tabs tabs = new Tabs(List.of(
             "Overview", "Metrics", "Logs", "Settings", "About"
         ));
 
@@ -49,10 +49,10 @@ public class TabsExample {
 
         @Override
         public void render(Rect area, Buffer buffer) {
-            new ClearWidget().render(area, buffer);
+            new Clear().render(area, buffer);
 
             var outer = Block.bordered(BorderStyle.ROUNDED)
-                .title(" TabsWidget ")
+                .title(" Tabs ")
                 .titleStyle(new Style(Color.CYAN, Color.RESET, Set.of(Modifier.BOLD)));
             outer.render(area, buffer);
             var inner = outer.innerRect(area);

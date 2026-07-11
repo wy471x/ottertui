@@ -13,23 +13,23 @@ import com.ottertui.tui.TuiRunner;
 import com.ottertui.widgets.Block;
 import com.ottertui.widgets.BorderStyle;
 import com.ottertui.widgets.Clear;
-import com.ottertui.widgets.Gauge;
+import com.ottertui.widgets.LineGauge;
 
 import java.io.IOException;
 import java.util.Set;
 
-public class GaugeExample {
+public class LineGaugeExample {
 
     public static void main(String[] args) throws IOException {
         var backend = new JLineBackend();
-        var runner = new TuiRunner(backend, new GComponent());
+        var runner = new TuiRunner(backend, new LGComponent());
         runner.keyBindings().bind(KeyCode.CHAR, Set.of(), 'q', runner::stop);
         runner.run();
     }
 
-    public static GComponent createComponent() { return new GComponent(); }
+    public static LGComponent createComponent() { return new LGComponent(); }
 
-    static class GComponent extends Component implements InteractiveExample {
+    static class LGComponent extends Component implements InteractiveExample {
         @Override
         public void handleKey(String key) { }
 
@@ -38,37 +38,41 @@ public class GaugeExample {
             new Clear().render(area, buffer);
 
             var outer = Block.bordered(BorderStyle.DOUBLE)
-                .title(" Gauge ")
+                .title(" LineGauge ")
                 .titleStyle(new Style(Color.CYAN, Color.RESET, Set.of(Modifier.BOLD)));
             outer.render(area, buffer);
             var inner = outer.innerRect(area);
 
-            record GaugeInfo(String label, double ratio, Style color) {}
-            GaugeInfo[] gauges = {
-                new GaugeInfo("CPU Usage  ", 0.23, new Style(Color.GREEN, Color.RESET, Set.of())),
-                new GaugeInfo("Memory     ", 0.67, new Style(Color.YELLOW, Color.RESET, Set.of())),
-                new GaugeInfo("Disk I/O   ", 0.45, new Style(Color.CYAN, Color.RESET, Set.of())),
-                new GaugeInfo("Network    ", 0.89, new Style(Color.RED, Color.RESET, Set.of())),
-                new GaugeInfo("GPU Load   ", 0.95, new Style(Color.MAGENTA, Color.RESET, Set.of())),
-                new GaugeInfo("Cache Hit  ", 0.12, new Style(Color.BLUE, Color.RESET, Set.of())),
+            int gaugeWidth = Math.min(50, inner.width() - 20);
+
+            record GInfo(String label, double ratio, Style color) {}
+            GInfo[] gauges = {
+                new GInfo("Download  ", 0.35, new Style(Color.GREEN, Color.RESET, Set.of())),
+                new GInfo("Upload    ", 0.12, new Style(Color.CYAN, Color.RESET, Set.of())),
+                new GInfo("Processing", 0.78, new Style(Color.YELLOW, Color.RESET, Set.of())),
+                new GInfo("Verifying ", 0.56, new Style(Color.BLUE, Color.RESET, Set.of())),
+                new GInfo("Complete  ", 1.0, new Style(Color.MAGENTA, Color.RESET, Set.of())),
             };
 
-            int gaugeWidth = Math.min(50, inner.width() - 20);
             for (int i = 0; i < gauges.length; i++) {
-                int y = inner.y() + 1 + i * 3;
-                if (y + 2 >= inner.y() + inner.height()) break;
+                int y = inner.y() + 1 + i * 2;
+                if (y >= inner.y() + inner.height()) break;
 
                 var g = gauges[i];
-                buffer.setString(inner.x() + 1, y, g.label(),
+                buffer.setString(inner.x() + 2, y, g.label(),
                     new Style(Color.WHITE, Color.RESET, Set.of(Modifier.BOLD)));
 
-                var gauge = new Gauge(g.ratio(), g.color(),
+                var gauge = new LineGauge(g.ratio(), g.color(),
                     new Style(Color.DARK_GRAY, Color.RESET, Set.of()));
                 gauge.render(new Rect(inner.x() + 14, y, gaugeWidth, 1), buffer);
 
                 String pct = String.format("%3.0f%%", g.ratio() * 100);
                 buffer.setString(inner.x() + 14 + gaugeWidth + 1, y, pct, g.color());
             }
+
+            var hint = new Style(Color.GRAY, Color.RESET, Set.of());
+            buffer.setString(inner.x() + 2, inner.y() + inner.height() - 2,
+                "LineGauge uses ━ (filled) and ─ (unfilled) line chars", hint);
         }
     }
 }

@@ -13,8 +13,8 @@ import com.ottertui.tui.Component;
 import com.ottertui.tui.TuiRunner;
 import com.ottertui.widgets.Block;
 import com.ottertui.widgets.BorderStyle;
-import com.ottertui.widgets.ClearWidget;
-import com.ottertui.widgets.ParagraphWidget;
+import com.ottertui.widgets.Clear;
+import com.ottertui.widgets.Paragraph;
 
 import java.io.IOException;
 import java.util.Set;
@@ -36,17 +36,17 @@ public class ParagraphExample {
 
         @Override
         public void render(Rect area, Buffer buffer) {
-            new ClearWidget().render(area, buffer);
+            new Clear().render(area, buffer);
 
             var outer = Block.bordered(BorderStyle.DOUBLE)
-                .title(" ParagraphWidget ")
+                .title(" Paragraph ")
                 .titleStyle(new Style(Color.CYAN, Color.RESET, Set.of(Modifier.BOLD)));
             outer.render(area, buffer);
             var inner = outer.innerRect(area);
 
             buffer.setString(inner.x(), inner.y(),
                 "LEFT (default):", new Style(Color.YELLOW, Color.RESET, Set.of(Modifier.BOLD)));
-            var left = new ParagraphWidget(
+            var left = new Paragraph(
                 "This text is left-aligned with word wrapping enabled. "
                 + "Long lines will automatically wrap to fit the available width.",
                 Style.DEFAULT, Alignment.LEFT, true);
@@ -56,7 +56,7 @@ public class ParagraphExample {
             int cy = inner.y() + 5;
             buffer.setString(inner.x(), cy,
                 "CENTER:", new Style(Color.YELLOW, Color.RESET, Set.of(Modifier.BOLD)));
-            var center = new ParagraphWidget(
+            var center = new Paragraph(
                 "Centered text with a custom color.",
                 new Style(Color.CYAN, Color.RESET, Set.of(Modifier.ITALIC)),
                 Alignment.CENTER, true);
@@ -65,7 +65,7 @@ public class ParagraphExample {
             int ry = inner.y() + 8;
             buffer.setString(inner.x(), ry,
                 "RIGHT:", new Style(Color.YELLOW, Color.RESET, Set.of(Modifier.BOLD)));
-            var right = new ParagraphWidget(
+            var right = new Paragraph(
                 "Right-aligned paragraph — useful for RTL or numeric data.",
                 new Style(Color.MAGENTA, Color.RESET, Set.of()),
                 Alignment.RIGHT, true);
@@ -74,7 +74,7 @@ public class ParagraphExample {
             int ny = inner.y() + 11;
             buffer.setString(inner.x(), ny,
                 "NO WRAP:", new Style(Color.YELLOW, Color.RESET, Set.of(Modifier.BOLD)));
-            var nowrap = new ParagraphWidget(
+            var nowrap = new Paragraph(
                 "This is too long and will be truncated at the edge...",
                 new Style(Color.RED, Color.RESET, Set.of(Modifier.BOLD)),
                 Alignment.LEFT, false);
