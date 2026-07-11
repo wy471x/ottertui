@@ -12,9 +12,9 @@ import com.ottertui.tui.Component;
 import com.ottertui.tui.TuiRunner;
 import com.ottertui.widgets.Block;
 import com.ottertui.widgets.BorderStyle;
-import com.ottertui.widgets.ClearWidget;
+import com.ottertui.widgets.Clear;
 import com.ottertui.widgets.TableState;
-import com.ottertui.widgets.TableWidget;
+import com.ottertui.widgets.Table;
 
 import java.io.IOException;
 import java.util.List;
@@ -49,11 +49,11 @@ public class TableExample {
             new Person("Jack Thomas", "Support", "jack@example.com")
         );
 
-        private final TableWidget<Person> table = new TableWidget<>(
+        private final Table<Person> table = new Table<>(
             List.of(
-                new TableWidget.Column<>("Name", p -> p.name(), 18),
-                new TableWidget.Column<>("Role", p -> p.role(), 12),
-                new TableWidget.Column<>("Email", p -> p.email(), 22)
+                new Table.Column<>("Name", p -> p.name(), 18),
+                new Table.Column<>("Role", p -> p.role(), 12),
+                new Table.Column<>("Email", p -> p.email(), 22)
             ),
             people
         );
@@ -69,10 +69,10 @@ public class TableExample {
 
         @Override
         public void render(Rect area, Buffer buffer) {
-            new ClearWidget().render(area, buffer);
+            new Clear().render(area, buffer);
 
             var outer = Block.bordered(BorderStyle.ROUNDED)
-                .title(" TableWidget ")
+                .title(" Table ")
                 .titleStyle(new Style(Color.CYAN, Color.RESET, Set.of(Modifier.BOLD)));
             outer.render(area, buffer);
             var inner = outer.innerRect(area);

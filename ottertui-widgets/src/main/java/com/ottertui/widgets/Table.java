@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 
-public class TableWidget<T> implements StatefulWidget<TableState> {
+public class Table<T> implements StatefulWidget<TableState> {
     private final List<Column<T>> columns;
     private final List<T> rows;
     private final Style headerStyle;
@@ -15,13 +15,13 @@ public class TableWidget<T> implements StatefulWidget<TableState> {
 
     public record Column<T>(String header, Function<T, String> extractor, int width) {}
 
-    public TableWidget(List<Column<T>> columns, List<T> rows) {
+    public Table(List<Column<T>> columns, List<T> rows) {
         this(columns, rows,
             new Style(Color.WHITE, Color.RESET, Set.of(Modifier.BOLD)),
             new Style(Color.BLACK, Color.WHITE, Set.of()));
     }
 
-    public TableWidget(List<Column<T>> columns, List<T> rows,
+    public Table(List<Column<T>> columns, List<T> rows,
                        Style headerStyle, Style selectedStyle) {
         this.columns = columns;
         this.rows = rows;

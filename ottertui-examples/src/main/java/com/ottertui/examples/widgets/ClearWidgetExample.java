@@ -13,7 +13,7 @@ import com.ottertui.tui.Component;
 import com.ottertui.tui.TuiRunner;
 import com.ottertui.widgets.Block;
 import com.ottertui.widgets.BorderStyle;
-import com.ottertui.widgets.ClearWidget;
+import com.ottertui.widgets.Clear;
 
 import java.io.IOException;
 import java.util.Set;
@@ -52,7 +52,7 @@ public class ClearWidgetExample {
             }
 
             var outer = Block.bordered(BorderStyle.ROUNDED)
-                .title(" ClearWidget ")
+                .title(" Clear ")
                 .borderStyle(new Style(Color.WHITE, Color.RESET, Set.of()))
                 .titleStyle(new Style(Color.WHITE, Color.RESET, Set.of(Modifier.BOLD)));
             outer.render(area, buffer);
@@ -68,12 +68,12 @@ public class ClearWidgetExample {
             buffer.setString(inner.x() + 2, inner.y() + 2,
                 "This area has background content", Style.DEFAULT);
             buffer.setString(inner.x() + 2, inner.y() + 3,
-                "Press LEFT/RIGHT to see ClearWidget in action", Style.DEFAULT);
+                "Press LEFT/RIGHT to see Clear in action", Style.DEFAULT);
 
             if (step >= 1) {
                 int cw = inner.width() / 2 - 2;
                 int ch = inner.height() / 2 - 2;
-                new ClearWidget().render(new Rect(inner.x() + 2, inner.y() + 2,
+                new Clear().render(new Rect(inner.x() + 2, inner.y() + 2,
                     cw, ch), buffer);
                 buffer.setString(inner.x() + 4, inner.y() + 2,
                     "Cleared!", new Style(Color.YELLOW, Color.RESET, Set.of(Modifier.BOLD)));
@@ -81,7 +81,7 @@ public class ClearWidgetExample {
             if (step >= 2) {
                 int cw = inner.width() / 2 - 2;
                 int ch = inner.height() / 2 - 2;
-                new ClearWidget().render(new Rect(
+                new Clear().render(new Rect(
                     inner.x() + inner.width() / 2, inner.y() + inner.height() / 2,
                     cw, ch), buffer);
                 buffer.setString(inner.x() + inner.width() / 2 + 2,

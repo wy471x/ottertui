@@ -5,17 +5,17 @@ import com.ottertui.core.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ParagraphWidget implements Widget {
+public class Paragraph implements Widget {
     private final String text;
     private final Style style;
     private final Alignment alignment;
     private final boolean wrap;
 
-    public ParagraphWidget(String text) {
+    public Paragraph(String text) {
         this(text, Style.DEFAULT, Alignment.LEFT, true);
     }
 
-    public ParagraphWidget(String text, Style style, Alignment alignment, boolean wrap) {
+    public Paragraph(String text, Style style, Alignment alignment, boolean wrap) {
         this.text = text;
         this.style = style;
         this.alignment = alignment;

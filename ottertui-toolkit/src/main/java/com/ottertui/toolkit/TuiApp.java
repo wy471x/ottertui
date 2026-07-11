@@ -33,7 +33,7 @@ public class TuiApp {
             }
             case Element.WidgetElement w -> new WidgetComponent(w.widget());
             case Element.TextElement t -> new WidgetComponent(
-                new ParagraphWidget(t.text(), t.style(),
+                new Paragraph(t.text(), t.style(),
                     com.ottertui.core.Alignment.LEFT, true));
         };
     }

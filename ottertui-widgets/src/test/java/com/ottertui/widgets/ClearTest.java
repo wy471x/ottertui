@@ -6,12 +6,12 @@ import org.junit.jupiter.api.DisplayName;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ClearWidgetTest {
+class ClearTest {
 
     @Test
     @DisplayName("render fills area with EMPTY cells")
     void renderFillsWithEmpty() {
-        ClearWidget w = new ClearWidget();
+        Clear w = new Clear();
         Buffer b = new Buffer(5, 3);
         Cell nonEmpty = new Cell('X', Style.DEFAULT);
         b.setCell(2, 1, nonEmpty);
@@ -28,7 +28,7 @@ class ClearWidgetTest {
     @Test
     @DisplayName("render clears specific area")
     void renderClearsSpecificArea() {
-        ClearWidget w = new ClearWidget();
+        Clear w = new Clear();
         Buffer b = new Buffer(10, 10);
         Cell nonEmpty = new Cell('X', Style.DEFAULT);
         b.setCell(0, 0, nonEmpty);

@@ -5,19 +5,19 @@ import com.ottertui.core.*;
 import java.util.List;
 import java.util.Set;
 
-public class TabsWidget implements Widget {
+public class Tabs implements Widget {
     private final List<String> titles;
     private int selected = 0;
     private final Style selectedStyle;
     private final Style normalStyle;
 
-    public TabsWidget(List<String> titles) {
+    public Tabs(List<String> titles) {
         this(titles,
             new Style(Color.BLACK, Color.WHITE, Set.of(Modifier.BOLD)),
             Style.DEFAULT);
     }
 
-    public TabsWidget(List<String> titles, Style selectedStyle, Style normalStyle) {
+    public Tabs(List<String> titles, Style selectedStyle, Style normalStyle) {
         this.titles = titles;
         this.selectedStyle = selectedStyle;
         this.normalStyle = normalStyle;

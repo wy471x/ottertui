@@ -12,8 +12,7 @@ import com.ottertui.tui.Component;
 import com.ottertui.tui.TuiRunner;
 import com.ottertui.widgets.Block;
 import com.ottertui.widgets.BorderStyle;
-import com.ottertui.widgets.ClearWidget;
-import com.ottertui.widgets.ListWidget;
+import com.ottertui.widgets.Clear;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,7 +35,7 @@ public class ListExample {
     public static LComponent createComponent() { return new LComponent(); }
 
     static class LComponent extends Component implements InteractiveExample {
-        private final ListWidget list = new ListWidget(new ArrayList<>(List.of(
+        private final com.ottertui.widgets.List list = new com.ottertui.widgets.List(new ArrayList<>(List.of(
             "Dashboard", "Metrics & Monitoring", "Application Logs",
             "System Settings", "User Management", "API Keys & Tokens",
             "Billing & Invoices", "Security Audit", "Help & Support",
@@ -54,10 +53,10 @@ public class ListExample {
 
         @Override
         public void render(Rect area, Buffer buffer) {
-            new ClearWidget().render(area, buffer);
+            new Clear().render(area, buffer);
 
             var outer = Block.bordered(BorderStyle.ROUNDED)
-                .title(" ListWidget ")
+                .title(" List ")
                 .titleStyle(new Style(Color.CYAN, Color.RESET, Set.of(Modifier.BOLD)));
             outer.render(area, buffer);
             var inner = outer.innerRect(area);

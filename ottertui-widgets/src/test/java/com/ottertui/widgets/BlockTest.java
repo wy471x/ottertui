@@ -140,6 +140,35 @@ class BlockTest {
     }
 
     @Test
+    @DisplayName("render with custom titleStyle applies style to title")
+    void renderCustomTitleStyle() {
+        Style titleStyle = new Style(Color.GREEN, Color.RESET, Set.of(Modifier.BOLD));
+        Block block = Block.bordered().title("Hi").titleStyle(titleStyle);
+        Buffer b = new Buffer(10, 5);
+        block.render(new Rect(0, 0, 10, 5), b);
+        assertEquals(titleStyle, b.getCell(2, 0).style());
+    }
+
+    @Test
+    @DisplayName("render skips with width < 2 but height >= 2")
+    void renderSkipsWithNarrowWidth() {
+        Block block = Block.bordered();
+        Buffer b = new Buffer(1, 10);
+        block.render(new Rect(0, 0, 1, 10), b);
+        assertEquals(Cell.EMPTY, b.getCell(0, 0));
+    }
+
+    @Test
+    @DisplayName("render with narrow width truncates title guard")
+    void renderNarrowTitleGuard() {
+        Block block = Block.bordered().title("AB");
+        Buffer b = new Buffer(3, 5);
+        block.render(new Rect(0, 0, 3, 5), b);
+        // maxWidth = 3 - 4 = -1 -> 0, so title is not rendered
+        assertEquals('┌', b.getCell(0, 0).ch());
+    }
+
+    @Test
     @DisplayName("innerRect returns area minus one on each side")
     void innerRect() {
         Block block = Block.bordered();

@@ -1,14 +1,22 @@
 package com.ottertui.core;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class Buffer {
     private final Cell[][] cells;
     private final int width;
     private final int height;
+    private final List<RawWrite> rawWrites;
+
+    public record RawWrite(int x, int y, String text) {}
 
     public Buffer(int width, int height) {
         this.width = width;
         this.height = height;
         this.cells = new Cell[height][width];
+        this.rawWrites = new ArrayList<>();
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 cells[y][x] = Cell.EMPTY;
@@ -18,6 +26,14 @@ public class Buffer {
 
     public int width() { return width; }
     public int height() { return height; }
+
+    public List<RawWrite> rawContent() {
+        return Collections.unmodifiableList(rawWrites);
+    }
+
+    public void addRawWrite(int x, int y, String text) {
+        rawWrites.add(new RawWrite(x, y, text));
+    }
 
     public Cell getCell(int x, int y) {
         if (x >= 0 && x < width && y >= 0 && y < height) {
@@ -117,6 +133,16 @@ public class Buffer {
         @Override
         public void setCell(int x, int y, Cell cell) {
             parent.setCell(offsetX + x, offsetY + y, cell);
+        }
+
+        @Override
+        public List<RawWrite> rawContent() {
+            return parent.rawContent();
+        }
+
+        @Override
+        public void addRawWrite(int x, int y, String text) {
+            parent.addRawWrite(offsetX + x, offsetY + y, text);
         }
     }
 }

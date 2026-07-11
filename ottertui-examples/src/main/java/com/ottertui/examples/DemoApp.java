@@ -114,7 +114,7 @@ public class DemoApp {
             if (inner.height() >= 5) {
                 int gaugeY = inner.y() + 4;
                 buffer.setString(inner.x(), gaugeY, "CPU: ", Style.DEFAULT);
-                var gauge = new GaugeWidget(0.73,
+                var gauge = new Gauge(0.73,
                     new Style(Color.GREEN, Color.RESET, Set.of()),
                     new Style(Color.RESET, Color.RESET, Set.of()));
                 gauge.render(new Rect(inner.x() + 5, gaugeY,
@@ -125,7 +125,7 @@ public class DemoApp {
             if (inner.height() >= 7) {
                 int chartY = inner.y() + 6;
                 buffer.setString(inner.x(), chartY, "Trend:", Style.DEFAULT);
-                var sparkline = new SparklineWidget(
+                var sparkline = new Sparkline(
                     List.of(10.0, 25.0, 15.0, 40.0, 30.0, 55.0, 45.0, 70.0,
                         60.0, 85.0, 75.0, 90.0, 80.0, 65.0, 50.0, 35.0,
                         45.0, 60.0, 75.0, 80.0),
@@ -137,11 +137,11 @@ public class DemoApp {
             // Bar chart
             if (inner.height() >= 14) {
                 int barY = inner.y() + 8;
-                var barChart = new BarChartWidget(List.of(
-                    new BarChartWidget.Bar("CPU", 65, new Style(Color.RED, Color.RESET, Set.of())),
-                    new BarChartWidget.Bar("Mem", 82, new Style(Color.YELLOW, Color.RESET, Set.of())),
-                    new BarChartWidget.Bar("Disk", 45, new Style(Color.GREEN, Color.RESET, Set.of())),
-                    new BarChartWidget.Bar("Net", 30, new Style(Color.BLUE, Color.RESET, Set.of()))
+                var barChart = new BarChart(List.of(
+                    new BarChart.Bar("CPU", 65, new Style(Color.RED, Color.RESET, Set.of())),
+                    new BarChart.Bar("Mem", 82, new Style(Color.YELLOW, Color.RESET, Set.of())),
+                    new BarChart.Bar("Disk", 45, new Style(Color.GREEN, Color.RESET, Set.of())),
+                    new BarChart.Bar("Net", 30, new Style(Color.BLUE, Color.RESET, Set.of()))
                 ), 5, 2);
                 barChart.render(new Rect(inner.x(), barY,
                     Math.min(40, inner.width()), 6), buffer);

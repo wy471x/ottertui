@@ -4,18 +4,18 @@ import com.ottertui.core.*;
 
 import java.util.List;
 
-public class SparklineWidget implements Widget {
+public class Sparkline implements Widget {
     private final List<Double> data;
     private final int maxDataPoints;
     private final Style style;
 
     private static final char[] BLOCKS = {'▁', '▂', '▃', '▄', '▅', '▆', '▇', '█'};
 
-    public SparklineWidget(List<Double> data) {
+    public Sparkline(List<Double> data) {
         this(data, 80, Style.DEFAULT);
     }
 
-    public SparklineWidget(List<Double> data, int maxDataPoints, Style style) {
+    public Sparkline(List<Double> data, int maxDataPoints, Style style) {
         this.data = data;
         this.maxDataPoints = maxDataPoints;
         this.style = style;

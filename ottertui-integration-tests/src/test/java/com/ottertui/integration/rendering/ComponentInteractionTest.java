@@ -21,9 +21,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class ComponentInteractionTest {
 
     @Test
-    @DisplayName("ListWidget: select + render, selection is reflected in buffer")
+    @DisplayName("List: select + render, selection is reflected in buffer")
     void listSelectionChangesRender() {
-        var list = new ListWidget(new ArrayList<>(List.of(
+        var list = new com.ottertui.widgets.List(new ArrayList<>(List.of(
             "Item A", "Item B", "Item C"
         )));
         var backend = new StubBackend().withSize(30, 8);
@@ -50,7 +50,7 @@ class ComponentInteractionTest {
     @Test
     @DisplayName("TabsWidget: switching tabs changes selected state")
     void tabSelectionSwitches() {
-        var tabs = new TabsWidget(List.of("Tab1", "Tab2", "Tab3"));
+        var tabs = new Tabs(List.of("Tab1", "Tab2", "Tab3"));
         var backend = new StubBackend().withSize(40, 3);
         var buf = new Buffer(40, 3);
 
@@ -79,10 +79,10 @@ class ComponentInteractionTest {
             items.add(new Item("Item-" + i, i * 10));
         }
 
-        var table = new TableWidget<>(
+        var table = new Table<>(
             List.of(
-                new TableWidget.Column<>("Name", Item::name, 10),
-                new TableWidget.Column<>("Value", r -> String.valueOf(r.val()), 8)
+                new Table.Column<>("Name", Item::name, 10),
+                new Table.Column<>("Value", r -> String.valueOf(r.val()), 8)
             ),
             items
         );
@@ -164,7 +164,7 @@ class ComponentInteractionTest {
         buf.setString(0, 2, "More text", Style.DEFAULT);
 
         // Clear the first row of content
-        new ClearWidget().render(new Rect(0, 1, 11, 1), buf);
+        new Clear().render(new Rect(0, 1, 11, 1), buf);
 
         // Verify first row is cleared
         for (int x = 0; x < 11; x++) {

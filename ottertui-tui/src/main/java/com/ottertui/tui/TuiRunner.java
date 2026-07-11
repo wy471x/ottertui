@@ -29,6 +29,8 @@ public class TuiRunner {
 
     public void run() {
         backend.enterRawMode();
+        backend.hideCursor();
+        backend.clearScreen();
         try {
             while (running) {
                 long now = System.currentTimeMillis();
@@ -51,6 +53,7 @@ public class TuiRunner {
                 }
             }
         } finally {
+            backend.showCursor();
             backend.exitRawMode();
         }
     }
