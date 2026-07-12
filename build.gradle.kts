@@ -28,8 +28,8 @@ subprojects {
     }
 
     java {
-        // toolchain/version intentionally unspecified — uses the current JVM.
-        // The settings.gradle.kts conditional excludes FFM on JDK <22.
+        // Toolchain intentionally unspecified — uses the current JVM.
+        // The FFM backend module guards itself on JDK < 22.
     }
 
     checkstyle {
