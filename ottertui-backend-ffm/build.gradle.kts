@@ -1,5 +1,9 @@
 import org.gradle.api.attributes.Attribute
 
+plugins {
+    id("ottertui.java-conventions")
+}
+
 if (JavaVersion.current() < JavaVersion.VERSION_22) {
     tasks.configureEach { enabled = false }
 }
@@ -10,14 +14,6 @@ tasks.withType<JavaCompile>().configureEach {
 
 tasks.withType<Test>().configureEach {
     jvmArgs("--enable-native-access=ALL-UNNAMED")
-}
-
-tasks.named<JacocoReport>("jacocoTestReport") {
-    classDirectories.setFrom(files())
-}
-
-tasks.named<JacocoCoverageVerification>("jacocoTestCoverageVerification") {
-    classDirectories.setFrom(files())
 }
 
 dependencies {

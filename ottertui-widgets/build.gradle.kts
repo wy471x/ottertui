@@ -1,3 +1,8 @@
+plugins {
+    id("ottertui.java-conventions")
+    id("ottertui.jacoco-conventions")
+}
+
 dependencies {
     api(project(":ottertui-core"))
     testImplementation(libs.junit.api)

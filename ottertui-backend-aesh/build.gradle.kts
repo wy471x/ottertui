@@ -1,9 +1,5 @@
-tasks.named<JacocoReport>("jacocoTestReport") {
-    classDirectories.setFrom(files())
-}
-
-tasks.named<JacocoCoverageVerification>("jacocoTestCoverageVerification") {
-    classDirectories.setFrom(files())
+plugins {
+    id("ottertui.java-conventions")
 }
 
 dependencies {

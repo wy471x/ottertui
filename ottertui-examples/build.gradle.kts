@@ -1,4 +1,5 @@
 plugins {
+    id("ottertui.java-conventions")
     application
 }
 
